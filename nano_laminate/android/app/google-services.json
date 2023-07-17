@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "133815046722",
+    "project_id": "nanolaminate-8fd37",
+    "storage_bucket": "nanolaminate-8fd37.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:133815046722:android:37f1e619fc2a9ae838d3db",
+        "android_client_info": {
+          "package_name": "com.example.nano_laminate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "133815046722-hp6o8if88iqb5u38k691gtcd3q4u23ku.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5WTQsto0T341Q1jdRszp0J1vzoABidjY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "133815046722-hp6o8if88iqb5u38k691gtcd3q4u23ku.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "133815046722-vqa83bdnsdbraupictrbg4q5cilf74qt.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.nanoLaminate"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
