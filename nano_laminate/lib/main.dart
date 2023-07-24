@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+import 'package:nano_laminate/routes/route.dart' as route;
 
 
 
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Nano Laminate',
-      home: LoginScreen(), // Pantalla de inicio de sesión
+      onGenerateRoute: route.controller,
+      initialRoute: route.loginView,
     );
   }
 }
