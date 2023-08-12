@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:nano_laminate/services/AuthFirebaseService.dart';
+import 'package:nano_laminate/services/notifications_service.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({Key? key}) : super(key: key);
@@ -8,6 +10,15 @@ class RegisterView extends StatefulWidget {
 }
 
 class _RegisterViewState extends State<RegisterView> {
+
+  String ? _userName;
+  String ? _password;
+
+  bool _isLoading = false;
+
+  final authService = AuthFirebaseService();
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,8 +69,8 @@ class _RegisterViewState extends State<RegisterView> {
 
         Container(
           padding: const EdgeInsets.only(top: 90.0),
-          child: Column(
-            children: const <Widget>[
+          child: const Column(
+            children: <Widget>[
               Icon( Icons.person_pin_circle, color: Colors.white, size: 100.0 ),
               SizedBox( height: 10.0, width: double.infinity ),
             ],
@@ -112,8 +123,6 @@ class _RegisterViewState extends State<RegisterView> {
                   const SizedBox(height: 30.0),
                   _crearPassword(),
                   const SizedBox(height: 30.0),
-                  _crearPassword(),
-                  const SizedBox(height: 30.0),
                   _crearBoton(),
                 ],
               ),
@@ -149,7 +158,7 @@ class _RegisterViewState extends State<RegisterView> {
           FocusScope.of(context).unfocus();
         },
         onChanged: (String value){
-
+          _userName = value;
         },
       ),
      );
@@ -177,7 +186,7 @@ class _RegisterViewState extends State<RegisterView> {
               ),
             ),
             onChanged: (String value){
-              
+              _password = value;
             },
           ),
         );
@@ -192,11 +201,24 @@ class _RegisterViewState extends State<RegisterView> {
         backgroundColor: MaterialStateProperty.resolveWith<Color>
         ((Set<MaterialState> states) => const Color.fromRGBO(1, 97, 156, 1)),
       ),
+      onPressed: _isLoading ? null : () async {
+        
+        _isLoading = true;
+
+        final String? errorMessage = await authService.createUser(_userName!, _password!);
+
+        if ( errorMessage == null ) {
+          // Navigator.pushReplacementNamed(context, 'home');
+          debugPrint("Correcto");
+        } else {
+          NotificationsService.showSnackbar(errorMessage);
+        }
+
+      } ,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
         child: const Text('Registrarse'),
       ),
-      onPressed: (){Navigator.pushReplacementNamed(context, 'home');} ,
     );
 
   }

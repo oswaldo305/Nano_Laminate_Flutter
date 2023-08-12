@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:nano_laminate/services/AuthFirebaseService.dart';
+import 'package:nano_laminate/services/notifications_service.dart';
 import 'package:nano_laminate/widgets/auth_background_widget.dart';
 
 class LoginView extends StatefulWidget {
@@ -9,6 +11,13 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
+
+  String ? _userName;
+  String ? _password;
+  bool _isLoading = false;
+
+  final authService = AuthFirebaseService();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,7 +123,10 @@ class _LoginViewState extends State<LoginView> {
           FocusScope.of(context).unfocus();
         },
         onChanged: (String value){
-
+          setState(() {
+            _userName = value;
+            debugPrint("User name: {$_userName}");
+          });
         },
       ),
      );
@@ -142,7 +154,8 @@ class _LoginViewState extends State<LoginView> {
               ),
             ),
             onChanged: (String value){
-              
+              _password = value;
+              debugPrint("password: {$_password}");
             },
           ),
         );
@@ -157,13 +170,31 @@ class _LoginViewState extends State<LoginView> {
         backgroundColor: MaterialStateProperty.resolveWith<Color>
         ((Set<MaterialState> states) => const Color.fromRGBO(1, 97, 156, 1)),
       ),
+      onPressed: _isLoading ? null : () async {
+        _login(_userName, _password);
+        // Navigator.pushReplacementNamed(context, 'home');
+      } ,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
         child: const Text('Ingresar'),
       ),
-      onPressed: (){Navigator.pushReplacementNamed(context, 'home');} ,
     );
 
   }
 
+  void _login(String? userName, String? password) async {
+
+    _isLoading = true;
+
+    final String? errorMessage = await authService.login(_userName!, _password!);
+
+    if ( errorMessage == null ) {
+      // Navigator.pushReplacementNamed(context, 'home');
+      debugPrint("Correcto");
+    } else {
+      NotificationsService.showSnackbar(errorMessage);
+    }
+
+  }
 }
+
