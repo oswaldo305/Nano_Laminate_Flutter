@@ -14,6 +14,9 @@ class _HomeViewState extends State<HomeView> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+     
+      
+      print(index);
     });
   }
 
@@ -27,6 +30,8 @@ class _HomeViewState extends State<HomeView> {
             icon: Icon(Icons.add),
             onPressed: () {
               // Acción al presionar el icono "+"
+              Navigator.pushReplacementNamed(context, 'bluetoothList');
+
             },
           ),
         ],
