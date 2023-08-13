@@ -3,6 +3,7 @@ import 'package:nano_laminate/services/AuthFirebaseService.dart';
 import 'package:nano_laminate/services/notifications_service.dart';
 import 'package:nano_laminate/widgets/auth_background_widget.dart';
 
+
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
 
@@ -89,6 +90,10 @@ class _LoginViewState extends State<LoginView> {
                   _crearPassword(),
                   const SizedBox(height: 30.0),
                   _crearBoton(),
+                  _crearBotonGoogle(),
+                  _crearBotonApple(),
+
+            
                 ],
               ),
             ),
@@ -182,6 +187,58 @@ class _LoginViewState extends State<LoginView> {
 
   }
 
+  _crearBotonGoogle() {
+  
+  
+   return ElevatedButton.icon(
+
+     style: ButtonStyle(
+        shape: MaterialStateProperty.all<OutlinedBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0))),
+        elevation: MaterialStateProperty.all<double>(0.0),
+        backgroundColor: MaterialStateProperty.resolveWith<Color>
+        ((Set<MaterialState> states) => Color.fromARGB(255, 232, 236, 239)),
+      ),
+
+      onPressed: _isLoading ? null : () async {
+        _login(_userName, _password);
+        // Navigator.pushReplacementNamed(context, 'home');
+      } ,
+      icon: Image.asset('assets/images/google.png', height: 24),
+      label: Text(
+                  'Iniciar sesión con Google',
+                  style: TextStyle(color: Color.fromARGB(255, 27, 27, 27)),
+                ),
+        
+    );
+    //SizedBox(height: 22);
+
+  }
+
+  _crearBotonApple() {
+  
+  
+   return ElevatedButton.icon(
+
+     style: ButtonStyle(
+        shape: MaterialStateProperty.all<OutlinedBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0))),
+        elevation: MaterialStateProperty.all<double>(0.0),
+        backgroundColor: MaterialStateProperty.resolveWith<Color>
+        ((Set<MaterialState> states) => Color.fromARGB(255, 0, 0, 0)),
+      ),
+
+      onPressed: () => Navigator.pushReplacementNamed(context, 'home'),
+      icon: Image.asset('assets/images/apple.png', height: 25),
+       label: Text(
+                'Iniciar sesión con Apple',
+                style: TextStyle(color: Colors.white),
+              ),
+      
+      
+    );
+    //SizedBox(height: 22);
+
+  }
+
   void _login(String? userName, String? password) async {
 
     _isLoading = true;
@@ -196,5 +253,8 @@ class _LoginViewState extends State<LoginView> {
     }
 
   }
+
+  
+
 }
 
