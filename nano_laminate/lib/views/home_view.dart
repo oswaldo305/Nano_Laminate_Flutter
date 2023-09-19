@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nano_laminate/services/AuthFirebaseService.dart';
 
 class HomeView extends StatefulWidget {
 
@@ -9,6 +10,9 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+
+  final authService = AuthFirebaseService();
+
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -16,7 +20,7 @@ class _HomeViewState extends State<HomeView> {
       _selectedIndex = index;
      
       
-      print(index);
+      debugPrint(index.toString());
     });
   }
 
@@ -24,26 +28,33 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Inicio'),
+        title: const Text('Inicio'),
          actions: [
           IconButton(
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
             onPressed: () {
               // Acción al presionar el icono "+"
-              Navigator.pushReplacementNamed(context, 'bluetoothList');
+              Navigator.pushNamed(context, 'bluetoothList');
 
             },
           ),
+          IconButton(
+            onPressed: (){
+              authService.logOut();
+              Navigator.pushReplacementNamed(context, 'login');
+            },
+            icon: const Icon(Icons.login_outlined)
+          )
         ],
       ),
-      body: Center(
+      body: const Center(
         child: Text(
           'Contenido principal de la pantalla',
           style: TextStyle(fontSize: 18),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Inicio',

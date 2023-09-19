@@ -1,8 +1,10 @@
-import 'dart:convert';
-
+// ignore: file_names
 import 'package:flutter/material.dart';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+// ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class AuthFirebaseService extends ChangeNotifier{
 
@@ -72,6 +74,12 @@ class AuthFirebaseService extends ChangeNotifier{
 
     await storage.delete(key: 'token'); 
     return;
+
+  }
+
+  Future<String> readToken() async {
+
+    return await  storage.read(key: 'token') ?? '';
 
   }
 

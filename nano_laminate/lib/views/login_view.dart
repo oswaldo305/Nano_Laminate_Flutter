@@ -196,7 +196,7 @@ class _LoginViewState extends State<LoginView> {
         shape: MaterialStateProperty.all<OutlinedBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0))),
         elevation: MaterialStateProperty.all<double>(0.0),
         backgroundColor: MaterialStateProperty.resolveWith<Color>
-        ((Set<MaterialState> states) => Color.fromARGB(255, 232, 236, 239)),
+        ((Set<MaterialState> states) => const Color.fromARGB(255, 232, 236, 239)),
       ),
 
       onPressed: _isLoading ? null : () async {
@@ -204,7 +204,7 @@ class _LoginViewState extends State<LoginView> {
         // Navigator.pushReplacementNamed(context, 'home');
       } ,
       icon: Image.asset('assets/images/google.png', height: 24),
-      label: Text(
+      label: const Text(
                   'Iniciar sesión con Google',
                   style: TextStyle(color: Color.fromARGB(255, 27, 27, 27)),
                 ),
@@ -223,12 +223,12 @@ class _LoginViewState extends State<LoginView> {
         shape: MaterialStateProperty.all<OutlinedBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0))),
         elevation: MaterialStateProperty.all<double>(0.0),
         backgroundColor: MaterialStateProperty.resolveWith<Color>
-        ((Set<MaterialState> states) => Color.fromARGB(255, 0, 0, 0)),
+        ((Set<MaterialState> states) => const Color.fromARGB(255, 0, 0, 0)),
       ),
 
       onPressed: () => Navigator.pushReplacementNamed(context, 'home'),
       icon: Image.asset('assets/images/apple.png', height: 25),
-       label: Text(
+       label: const Text(
                 'Iniciar sesión con Apple',
                 style: TextStyle(color: Colors.white),
               ),
@@ -246,8 +246,8 @@ class _LoginViewState extends State<LoginView> {
     final String? errorMessage = await authService.login(_userName!, _password!);
 
     if ( errorMessage == null ) {
-      // Navigator.pushReplacementNamed(context, 'home');
-      debugPrint("Correcto");
+      // ignore: use_build_context_synchronously
+      Navigator.pushReplacementNamed(context, 'home');
     } else {
       NotificationsService.showSnackbar(errorMessage);
     }

@@ -15,14 +15,17 @@ class BluetoothListView extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: BluetoothScreen(),
+      home: const BluetoothScreen(),
     );
   }
 }
 
 class BluetoothScreen extends StatefulWidget {
+  
+  const BluetoothScreen({Key? key}) : super(key: key);
+
   @override
-  _BluetoothScreenState createState() => _BluetoothScreenState();
+  State<BluetoothScreen> createState() => _BluetoothScreenState();
 }
 
 class _BluetoothScreenState extends State<BluetoothScreen> {
@@ -45,7 +48,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
 
     // Comienza a escanear dispositivos Bluetooth cercanos.
     await flutterBlue.startScan(
-      timeout: Duration(seconds: 10), // Puedes ajustar el tiempo de escaneo.
+      timeout: const Duration(seconds: 10), // Puedes ajustar el tiempo de escaneo.
     );
   }
 
@@ -59,7 +62,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bluetooth Scanner'),
+        title: const Text('Bluetooth Scanner'),
       ),
       body: Center(
         child: ListView.builder(
@@ -67,7 +70,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
           itemBuilder: (context, index) {
             final device = devicesList[index];
             return ListTile(
-              title: Text(device.name ?? 'Unknown'),
+              title: Text(device.name),
               subtitle: Text(device.id.toString()),
               onTap: () {
                 // Aquí implementar una acción al seleccionar un dispositivo.
