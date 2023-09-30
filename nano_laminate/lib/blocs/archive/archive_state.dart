@@ -1,6 +1,20 @@
 part of 'archive_bloc.dart';
 
-@immutable
-abstract class ArchiveState {}
+class ArchiveState extends Equatable {
 
-class ArchiveInitial extends ArchiveState {}
+  final List<Archive> archives;
+
+  const ArchiveState({
+    archives
+  }): archives = archives ?? const [];
+
+  ArchiveState copyWith({
+    List<Archive> ? archives
+  }) => ArchiveState(
+    archives: archives ?? this.archives
+  );
+
+  @override
+  List<Object?> get props => [archives];
+
+}

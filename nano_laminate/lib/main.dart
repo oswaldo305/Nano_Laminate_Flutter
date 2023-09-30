@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nano_laminate/blocs/archive/archive_bloc.dart';
 import 'package:nano_laminate/routes/route.dart' as route;
 import 'package:nano_laminate/services/notifications_service.dart';
+import 'package:provider/provider.dart';
 
 
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      BlocProvider(create: (context) => ArchiveBloc()),
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
