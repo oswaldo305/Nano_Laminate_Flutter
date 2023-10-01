@@ -45,7 +45,7 @@ class _HomeViewState extends State<HomeView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Inicio'),
+        title: const Text('Plantillas'),
          actions: [
           IconButton(
             icon: const Icon(Icons.add),
@@ -70,20 +70,20 @@ class _HomeViewState extends State<HomeView> {
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Inicio',
+            icon: Icon(Icons.screenshot),
+            label: 'Plantillas',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.star),
-            label: 'Premium',
-          ),
-           BottomNavigationBarItem(
             icon: Icon(Icons.bluetooth),
             label: 'Conexiones',
           ),
+           BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Configuración',
+          ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue,
+        selectedItemColor: Color.fromRGBO(150, 0, 19, 1),
         onTap: _onItemTapped,
       ),
     );
