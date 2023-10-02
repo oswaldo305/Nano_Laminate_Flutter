@@ -15,7 +15,7 @@ class ArchiveButtonWidget extends StatelessWidget {
         IconButton(
           iconSize: 80.0,
           onPressed: (){
-
+            Navigator.pushNamed(context, 'archive_view', arguments: archive);
           }, 
           icon: const Icon(Icons.archive, color: Colors.blue),
         ),

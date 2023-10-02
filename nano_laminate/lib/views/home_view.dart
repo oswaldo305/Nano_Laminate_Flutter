@@ -51,7 +51,6 @@ class _HomeViewState extends State<HomeView> {
             icon: const Icon(Icons.add),
             onPressed: () {
               showDialog(context: context, builder: (_) => const AlertAddArchiveWidget());
-
             },
           ),
           IconButton(
@@ -92,7 +91,7 @@ class _HomeViewState extends State<HomeView> {
 Center textPrincipalContent() {
   return const Center(
       child: Text(
-        'Animate a crear nuevos archivos.',
+        'Animate a crear una nueva carpeta.',
         style: TextStyle(fontSize: 18),
       ),
     );

@@ -54,6 +54,7 @@ class DefaultFirebaseOptions {
     appId: '1:133815046722:android:37f1e619fc2a9ae838d3db',
     messagingSenderId: '133815046722',
     projectId: 'nanolaminate-8fd37',
+    databaseURL: 'https://nanolaminate-8fd37-default-rtdb.firebaseio.com',
     storageBucket: 'nanolaminate-8fd37.appspot.com',
   );
 
@@ -62,6 +63,7 @@ class DefaultFirebaseOptions {
     appId: '1:133815046722:ios:9b63a7ed28acce6738d3db',
     messagingSenderId: '133815046722',
     projectId: 'nanolaminate-8fd37',
+    databaseURL: 'https://nanolaminate-8fd37-default-rtdb.firebaseio.com',
     storageBucket: 'nanolaminate-8fd37.appspot.com',
     iosClientId: '133815046722-vqa83bdnsdbraupictrbg4q5cilf74qt.apps.googleusercontent.com',
     iosBundleId: 'com.example.nanoLaminate',

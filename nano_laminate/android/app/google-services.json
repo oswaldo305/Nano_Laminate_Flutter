@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "133815046722",
+    "firebase_url": "https://nanolaminate-8fd37-default-rtdb.firebaseio.com",
     "project_id": "nanolaminate-8fd37",
     "storage_bucket": "nanolaminate-8fd37.appspot.com"
   },
@@ -14,7 +15,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "133815046722-hp6o8if88iqb5u38k691gtcd3q4u23ku.apps.googleusercontent.com",
+          "client_id": "133815046722-49u34ual90ocmoid55aeet7firvkccb6.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -27,7 +28,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "133815046722-hp6o8if88iqb5u38k691gtcd3q4u23ku.apps.googleusercontent.com",
+              "client_id": "133815046722-49u34ual90ocmoid55aeet7firvkccb6.apps.googleusercontent.com",
               "client_type": 3
             },
             {
