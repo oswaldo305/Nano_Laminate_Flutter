@@ -141,7 +141,7 @@ class _RegisterViewState extends State<RegisterView> {
         ),
         decoration: const InputDecoration(
           icon: Icon(Icons.person,
-              color: Color.fromRGBO(1, 97, 156, 1)),
+              color: Color.fromRGBO(150, 0, 19, 1)),
           hintText: '',
           labelText: 'Usuario',
           labelStyle: TextStyle(
@@ -175,7 +175,7 @@ class _RegisterViewState extends State<RegisterView> {
             decoration: const InputDecoration(
               icon: Icon(
                 Icons.lock_outline,
-                  color: Color.fromRGBO(1, 97, 156, 1)
+                  color: Color.fromRGBO(150, 0, 19, 1)
               ),
               labelText: 'Contraseña',
               labelStyle: TextStyle(
@@ -199,7 +199,7 @@ class _RegisterViewState extends State<RegisterView> {
         shape: MaterialStateProperty.all<OutlinedBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0))),
         elevation: MaterialStateProperty.all<double>(0.0),
         backgroundColor: MaterialStateProperty.resolveWith<Color>
-        ((Set<MaterialState> states) => const Color.fromRGBO(1, 97, 156, 1)),
+        ((Set<MaterialState> states) => const Color.fromRGBO(150, 0, 19, 1)),
       ),
       onPressed: _isLoading ? null : () async {
         

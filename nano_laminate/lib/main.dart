@@ -5,6 +5,7 @@ import 'package:nano_laminate/blocs/archive/archive_bloc.dart';
 import 'package:nano_laminate/firebase_options.dart';
 import 'package:nano_laminate/routes/route.dart' as route;
 import 'package:nano_laminate/services/notifications_service.dart';
+import 'package:nano_laminate/theme.dart';
 import 'package:provider/provider.dart';
 
 
@@ -24,9 +25,13 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       title: 'Nano Laminate',
       onGenerateRoute: route.controller,

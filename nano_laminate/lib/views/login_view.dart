@@ -33,7 +33,7 @@ class _LoginViewState extends State<LoginView> {
 
               const SizedBox( height: 50 ),
               TextButton(
-                onPressed: () => Navigator.pushReplacementNamed(context, 'register'), 
+                onPressed: () => Navigator.pushNamed(context, 'register'), 
                 style: ButtonStyle(
                   overlayColor: MaterialStateProperty.all( Colors.indigo.withOpacity(0.1)),
                   shape: MaterialStateProperty.all( const StadiumBorder() )
@@ -83,7 +83,7 @@ class _LoginViewState extends State<LoginView> {
               ),
               child: Column(
                 children: [
-                  const Text("Login", style: TextStyle(color: Colors.black, fontSize: 20.0),),
+                  const Text("Iniciar Sesión", style: TextStyle(color: Colors.black, fontSize: 20.0),),
                   const SizedBox(height: 15.0,),
                   _crearEmail(size.height, size.width),
                   const SizedBox(height: 30.0),
@@ -111,7 +111,7 @@ class _LoginViewState extends State<LoginView> {
         ),
         decoration: const InputDecoration(
           icon: Icon(Icons.person,
-              color: Color.fromRGBO(1, 97, 156, 1)),
+              color: Color.fromRGBO(150, 0, 19, 1)),
           hintText: '',
           labelText: 'Usuario',
           labelStyle: TextStyle(
@@ -148,7 +148,7 @@ class _LoginViewState extends State<LoginView> {
             decoration: const InputDecoration(
               icon: Icon(
                 Icons.lock_outline,
-                  color: Color.fromRGBO(1, 97, 156, 1)
+                  color: Color.fromRGBO(150, 0, 19, 1)
               ),
               labelText: 'Contraseña',
               labelStyle: TextStyle(
@@ -173,14 +173,14 @@ class _LoginViewState extends State<LoginView> {
         shape: MaterialStateProperty.all<OutlinedBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0))),
         elevation: MaterialStateProperty.all<double>(0.0),
         backgroundColor: MaterialStateProperty.resolveWith<Color>
-        ((Set<MaterialState> states) => const Color.fromRGBO(1, 97, 156, 1)),
+        ((Set<MaterialState> states) => const Color.fromRGBO(150, 0, 19, 1)),
       ),
       onPressed: _isLoading ? null : () async {
         _login(_userName, _password);
         // Navigator.pushReplacementNamed(context, 'home');
       } ,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
+        padding: const EdgeInsets.symmetric(horizontal  : 80.0, vertical: 15.0),
         child: const Text('Ingresar'),
       ),
     );
@@ -227,7 +227,7 @@ class _LoginViewState extends State<LoginView> {
       ),
 
       onPressed: () => Navigator.pushReplacementNamed(context, 'home'),
-      icon: Image.asset('assets/images/apple.png', height: 25),
+      icon: Image.asset('assets/images/apple.png', height: 24),
        label: const Text(
                 'Iniciar sesión con Apple',
                 style: TextStyle(color: Colors.white),
