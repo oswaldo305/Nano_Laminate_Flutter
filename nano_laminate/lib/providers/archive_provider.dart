@@ -1,34 +1,30 @@
 
 
 import 'dart:convert';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:nano_laminate/model/archive_model.dart';
-import 'package:http/http.dart' as http;
 
 class ArchiveProvider {
 
-
   final String _baseUrl = "nanolaminate-8fd37-default-rtdb.firebaseio.com";
-
-  
+  final FirebaseFirestore db = FirebaseFirestore.instance;
 
   Future<List<Archive>> getArchives() async {
 
     final List<Archive> archives = [];
+    CollectionReference collectionReferenceArchives = db.collection("archive");
+    QuerySnapshot queryArchives = await collectionReferenceArchives.get();
 
-    final url = Uri.https(_baseUrl, "archive.json");
+    for (var documento in queryArchives.docs) {
+      String archiveJson = jsonEncode(documento.data());
+      Map<String, dynamic> archiveMap = jsonDecode(archiveJson);
+      Archive archive = Archive.fromJson(archiveMap);
+      archive.id = documento.id;
+      archives.add(archive);
+      debugPrint(archiveMap.toString());
+    }
 
-    final response = await http.get(url);
-
-    Map<String, dynamic> archiveMap = json.decode(response.body);
-    archiveMap.forEach((key, value) {
-         final tempArchive = Archive.fromJson(value);
-         tempArchive.id = key;
-         archives.add(tempArchive);
-    });
-
-    debugPrint(archiveMap.toString());
 
     return archives;
 
@@ -36,11 +32,9 @@ class ArchiveProvider {
 
   Future<Archive> postArchives(Archive archive) async {
 
-    final url = Uri.https(_baseUrl, "archive.json");
-    final resp = await http.post(url, body: archive.toJson());
-    final decodeData = json.decode(resp.body);
-
-    archive.id = decodeData['name'];
+    CollectionReference collectionReferenceArchives = db.collection("archive");
+    DocumentReference documentReference = await collectionReferenceArchives.add(archive.toJson());
+    archive.id = documentReference.id;
 
     return archive;
 

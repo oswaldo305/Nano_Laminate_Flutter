@@ -45,6 +45,7 @@ class _HomeViewState extends State<HomeView> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color.fromRGBO(150, 0, 19, 1),
         title: const Text('Plantillas'),
          actions: [
           IconButton(
@@ -82,7 +83,7 @@ class _HomeViewState extends State<HomeView> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Color.fromRGBO(150, 0, 19, 1),
+        selectedItemColor: const Color.fromRGBO(150, 0, 19, 1),
         onTap: _onItemTapped,
       ),
     );

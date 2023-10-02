@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 final FirebaseStorage storage = FirebaseStorage.instance;
 
-Future<bool> uploadImage(File file) async{
+Future<String> uploadImage(File file) async{
 
   final String nameFile = file.path.split("/").last;
 
@@ -19,6 +19,6 @@ Future<bool> uploadImage(File file) async{
   debugPrint(url);
 
 
-  return false;
+  return url;
 
 }

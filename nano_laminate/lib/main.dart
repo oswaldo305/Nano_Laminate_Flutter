@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nano_laminate/blocs/archive/archive_bloc.dart';
+import 'package:nano_laminate/blocs/bloc/image_user_bloc.dart';
 import 'package:nano_laminate/firebase_options.dart';
 import 'package:nano_laminate/routes/route.dart' as route;
 import 'package:nano_laminate/services/notifications_service.dart';
@@ -17,6 +18,7 @@ void main() async {
   runApp(MultiProvider(
     providers: [
       BlocProvider(create: (context) => ArchiveBloc()),
+      BlocProvider(create: (context) => ImageUserBloc())
     ],
     child: const MyApp(),
   ));
@@ -35,7 +37,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Nano Laminate',
       onGenerateRoute: route.controller,
-      initialRoute: route.checkAuthView,
+      initialRoute: route.homeView,
       scaffoldMessengerKey: NotificationsService.messengerKey,
     );
   }

@@ -21,6 +21,9 @@ class _AlertAddArchiveWidgetState extends State<AlertAddArchiveWidget> {
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
           child: TextField(
             decoration: const InputDecoration(
+              focusedBorder:  OutlineInputBorder(
+                borderSide: BorderSide(color: Color.fromRGBO(150, 0, 19, 1) ),
+              ),
               border: OutlineInputBorder(),
               hintText: 'Nombre de la carpeta',
             ),
@@ -33,17 +36,19 @@ class _AlertAddArchiveWidgetState extends State<AlertAddArchiveWidget> {
         TextButton(
           onPressed: (){
             final archiveBloc = BlocProvider.of<ArchiveBloc>(context);
-            final Archive archive = Archive(nombre: _nombreArchive);
-            archiveBloc.addArchive(archive);
-            Navigator.pop(context);
+            if(_nombreArchive.isNotEmpty){  
+              final Archive archive = Archive(nombre: _nombreArchive);
+              archiveBloc.addArchive(archive);
+              Navigator.pop(context);
+            }
           }, 
-          child: const Text("ACEPTAR")
+          child: const Text("ACEPTAR", style: TextStyle(color: Color.fromRGBO(150, 0, 19, 1)),)
         ),
         TextButton(
           onPressed: (){
             Navigator.pop(context);
           }, 
-          child: const Text("CANCELAR")
+          child: const Text("CANCELAR", style: TextStyle(color: Color.fromRGBO(150, 0, 19, 1)))
         ),
       ],
     );
