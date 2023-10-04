@@ -19,3 +19,11 @@ class NewImageUserEvent extends ImageUserEvent {
   const NewImageUserEvent(this.imageUser);
 
 }
+
+class UpdateImageUserEvent extends ImageUserEvent {
+
+  final List<ImageUser> imagesUser;
+
+  const UpdateImageUserEvent(this.imagesUser);
+
+}

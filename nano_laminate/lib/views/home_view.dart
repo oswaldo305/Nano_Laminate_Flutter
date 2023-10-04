@@ -4,6 +4,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:nano_laminate/blocs/archive/archive_bloc.dart';
 import 'package:nano_laminate/model/archive_model.dart';
 import 'package:nano_laminate/services/AuthFirebaseService.dart';
+import 'package:nano_laminate/shared_preference/user_preference.dart';
 import 'package:nano_laminate/widgets/alerts/alert_add_archive_widget.dart';
 import 'package:nano_laminate/widgets/archive/archive_button_widget.dart';
 
@@ -42,6 +43,7 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
 
     final size = MediaQuery.of(context).size;
+    debugPrint("isAdmin: ${UserPreference.isAdmin}");
 
     return Scaffold(
       appBar: AppBar(

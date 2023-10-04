@@ -14,6 +14,7 @@ import 'package:google_sign_in_web/google_sign_in_web.dart';
 // import 'package:sign_in_with_apple_web/sign_in_with_apple_web.dart';
 
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
+import 'package:shared_preferences_web/shared_preferences_web.dart';
 
 // ignore: public_member_api_docs
 void registerPlugins(Registrar registrar) {
@@ -22,6 +23,7 @@ void registerPlugins(Registrar registrar) {
   FirebaseCoreWeb.registerWith(registrar);
   FlutterFacebookAuthPlugin.registerWith(registrar);
   GoogleSignInPlugin.registerWith(registrar);
+  SharedPreferencesPlugin.registerWith(registrar);
   // SignInWithApplePlugin.registerWith(registrar);
   registrar.registerMessageHandler();
 }

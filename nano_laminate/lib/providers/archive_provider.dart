@@ -7,7 +7,6 @@ import 'package:nano_laminate/model/archive_model.dart';
 
 class ArchiveProvider {
 
-  final String _baseUrl = "nanolaminate-8fd37-default-rtdb.firebaseio.com";
   final FirebaseFirestore db = FirebaseFirestore.instance;
 
   Future<List<Archive>> getArchives() async {

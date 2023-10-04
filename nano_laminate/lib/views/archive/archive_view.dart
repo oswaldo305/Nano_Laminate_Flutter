@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:nano_laminate/blocs/bloc/image_user_bloc.dart';
+import 'package:nano_laminate/blocs/image_user/image_user_bloc.dart';
 import 'package:nano_laminate/model/archive_model.dart';
 import 'package:nano_laminate/model/image_user_model.dart';
+import 'package:nano_laminate/shared_preference/user_preference.dart';
 import 'package:nano_laminate/widgets/archive/image_user_button_widget.dart';
 
 class ArchiveView extends StatefulWidget {
@@ -24,7 +25,7 @@ class _ArchiveViewState extends State<ArchiveView> {
   void initState() {
     super.initState();
     imageUserBloc = BlocProvider.of<ImageUserBloc>(context);
-    imageUserBloc.getImagesUser(widget.archive.id!);
+    UserPreference.isAdmin ? imageUserBloc.getImagesUser(widget.archive.id!) : imageUserBloc.getActiveImagesUser(widget.archive.id!);
   }
 
   @override
@@ -40,9 +41,9 @@ class _ArchiveViewState extends State<ArchiveView> {
           IconButton(
             disabledColor: Colors.transparent,
             icon: const Icon(Icons.add),
-            onPressed: () async {
+            onPressed: UserPreference.isAdmin ? () async {
               Navigator.pushNamed(context, 'file_upload_view', arguments: widget.archive);
-            },
+            } : null,
           )
         ],
       ),

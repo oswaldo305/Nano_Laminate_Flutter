@@ -2,10 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nano_laminate/blocs/archive/archive_bloc.dart';
-import 'package:nano_laminate/blocs/bloc/image_user_bloc.dart';
+import 'package:nano_laminate/blocs/image_user/image_user_bloc.dart';
 import 'package:nano_laminate/firebase_options.dart';
 import 'package:nano_laminate/routes/route.dart' as route;
 import 'package:nano_laminate/services/notifications_service.dart';
+import 'package:nano_laminate/shared_preference/user_preference.dart';
 import 'package:nano_laminate/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -13,6 +14,7 @@ import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await UserPreference.init();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(MultiProvider(
@@ -37,7 +39,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Nano Laminate',
       onGenerateRoute: route.controller,
-      initialRoute: route.homeView,
+      initialRoute: route.loginView,
       scaffoldMessengerKey: NotificationsService.messengerKey,
     );
   }

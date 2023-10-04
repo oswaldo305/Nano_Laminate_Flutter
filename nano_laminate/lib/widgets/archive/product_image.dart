@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:nano_laminate/widgets/archive/image_full_screen_widget.dart';
+import 'package:nano_laminate/views/archive/image_full_screen_view.dart';
 
 class ProductImage extends StatelessWidget {
 

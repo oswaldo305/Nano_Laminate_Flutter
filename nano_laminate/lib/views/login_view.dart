@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:nano_laminate/providers/user_provider.dart';
 import 'package:nano_laminate/services/AuthFirebaseService.dart';
 import 'package:nano_laminate/services/notifications_service.dart';
+import 'package:nano_laminate/shared_preference/user_preference.dart';
 import 'package:nano_laminate/widgets/auth_background_widget.dart';
 
 
@@ -18,6 +20,7 @@ class _LoginViewState extends State<LoginView> {
   bool _isLoading = false;
 
   final authService = AuthFirebaseService();
+  final userProvider = UserProvider();
 
   @override
   Widget build(BuildContext context) {
@@ -181,7 +184,7 @@ class _LoginViewState extends State<LoginView> {
       } ,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal  : 80.0, vertical: 15.0),
-        child: const Text('Ingresar'),
+        child: const Text('Ingresar', style: TextStyle(color: Colors.white),),
       ),
     );
 
@@ -240,15 +243,21 @@ class _LoginViewState extends State<LoginView> {
   }
 
   void _login(String? userName, String? password) async {
-
     _isLoading = true;
 
     final String? errorMessage = await authService.login(_userName!, _password!);
+    final String adminEmail = await userProvider.getAdmin();
 
     if ( errorMessage == null ) {
+      if(userName == adminEmail){
+        UserPreference.isAdmin = true;
+      }else{
+        UserPreference.isAdmin = false;
+      }
       // ignore: use_build_context_synchronously
       Navigator.pushReplacementNamed(context, 'home');
     } else {
+      _isLoading = false;
       NotificationsService.showSnackbar(errorMessage);
     }
 

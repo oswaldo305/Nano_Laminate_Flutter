@@ -4,29 +4,26 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nano_laminate/blocs/image_user/image_user_bloc.dart';
-import 'package:nano_laminate/model/archive_model.dart';
 import 'package:nano_laminate/model/image_user_model.dart';
 import 'package:nano_laminate/services/FireBaseStorageService.dart';
 import 'package:nano_laminate/widgets/archive/product_image.dart';
 
-class FileUploadView extends StatefulWidget {
+class FileUpdateView extends StatefulWidget {
 
-  final Archive archive;
+  final ImageUser imageUser;
 
-  const FileUploadView({super.key, required this.archive});
+  const FileUpdateView({super.key, required this.imageUser});
 
   @override
-  State<FileUploadView> createState() => _FileUploadViewState();
+  State<FileUpdateView> createState() => _FileUpdateViewState();
 }
 
-class _FileUploadViewState extends State<FileUploadView> {
+class _FileUpdateViewState extends State<FileUpdateView> {
 
-  String url = "";
-  String nombreArchivo = "";
   TextEditingController nombreController = TextEditingController();
-  bool isEnable = true;
   bool _isLoading = false;
   late ImageUserBloc imageUserBloc;
+  String url = "";
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +33,7 @@ class _FileUploadViewState extends State<FileUploadView> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(150, 0, 19, 1),
-        title: const Text("Agrega un archivo"),
+        title: const Text("Actualizar un archivo"),
         actions: [
           IconButton(
             onPressed: () async {
@@ -73,8 +70,8 @@ class _FileUploadViewState extends State<FileUploadView> {
       margin: const EdgeInsets.only(left: 20.0, top: 20.0, right: 20.0),
       child: Center(
         child: TextFormField(
+          initialValue: widget.imageUser.nombre,
           cursorColor: Colors.black,
-          controller: nombreController,
           decoration: InputDecoration(
             hintText: hintText,
             prefixIcon: icon,
@@ -87,7 +84,7 @@ class _FileUploadViewState extends State<FileUploadView> {
           ),
           onChanged: (value) {
             setState(() {
-              nombreArchivo = value;
+              widget.imageUser.nombre = value;
             });
           } ,
         ),
@@ -109,12 +106,12 @@ class _FileUploadViewState extends State<FileUploadView> {
           const SizedBox(width: 10.0,),
           Switch(
             // This bool value toggles the switch.
-            value: isEnable,
+            value: widget.imageUser.status,
             activeColor: Colors.red,
             onChanged: (bool value) {
               // This is called when the user toggles the switch.
               setState(() {
-                isEnable = value;
+                widget.imageUser.status = value;
               });
             },
           ),
@@ -157,8 +154,7 @@ class _FileUploadViewState extends State<FileUploadView> {
         ),
         onPressed: _isLoading ? null : () async {
           _isLoading = true;
-          debugPrint("nombre archivo: $nombreArchivo , url: $url");
-          if(url.isEmpty || nombreArchivo.isEmpty){
+          if(widget.imageUser.path!.isEmpty || widget.imageUser.nombre.isEmpty){
             showDialog(context: context, builder: (_) => AlertDialog(
               title: const Text("Asegurate de seleccionar un archivo y llenar el campo nombre"),
               actions: [
@@ -172,10 +168,12 @@ class _FileUploadViewState extends State<FileUploadView> {
               ],
             ));
           }else{
-            final urlFirebase = await uploadImage(File(url));
-            ImageUser imageUser = ImageUser(nombre: nombreArchivo, idArchive: widget.archive.id!, status: isEnable, path: urlFirebase);
-            debugPrint("imageUser: ${imageUser.nombre} , ${imageUser.idArchive} , ${imageUser.status} , ${imageUser.path}");
-            imageUserBloc.addImageUser(imageUser);
+            if(widget.imageUser.path! != url){
+              final urlFirebase = await uploadImage(File(url));
+              widget.imageUser.path = urlFirebase;
+            }
+            debugPrint("imageUser: ${widget.imageUser.nombre} , ${widget.imageUser.idArchive} , ${widget.imageUser.status} , ${widget.imageUser.path}");
+            imageUserBloc.updateImageUser(widget.imageUser);
             Navigator.pushReplacementNamed(context, "home");
           }
           // Navigator.pushReplacementNamed(context, 'home');

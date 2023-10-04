@@ -1,24 +1,35 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:nano_laminate/model/image_user_model.dart';
 
-class ImageFullScreen extends StatelessWidget {
+class ImagePrintFullScreen extends StatelessWidget {
 
-  final String imageURL;
+  final ImageUser imageUser;
 
-  const ImageFullScreen({
+  const ImagePrintFullScreen({
     Key? key,
-    required this.imageURL,
+    required this.imageUser,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text("${imageUser.nombre[0].toUpperCase()} ${imageUser.nombre.substring(0)}"),
+        actions: [
+          IconButton(
+            onPressed: (){
+
+            },
+            icon: const Icon(Icons.print)
+          )
+        ],
+      ),
       body: SizedBox.expand(
         child: Hero(
           tag: 'my_image',
-          child: getImage(imageURL, context),
+          child: getImage(imageUser.path, context),
         ),
       ),
     );
