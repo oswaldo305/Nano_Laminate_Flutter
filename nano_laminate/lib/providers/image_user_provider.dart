@@ -75,6 +75,12 @@ class ImageUserProvider {
 
   }
 
+  Future deleteImageUser(ImageUser imageUser) async{
+
+    await db.collection("image").doc(imageUser.id).delete();
+
+  }
+
 
 
 }

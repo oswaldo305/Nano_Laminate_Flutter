@@ -24,6 +24,16 @@ class _FileUpdateViewState extends State<FileUpdateView> {
   bool _isLoading = false;
   late ImageUserBloc imageUserBloc;
   String url = "";
+  late bool isEnable;
+  late String nombreArchivo;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    isEnable =  widget.imageUser.status;
+    nombreArchivo = widget.imageUser.nombre;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +45,30 @@ class _FileUpdateViewState extends State<FileUpdateView> {
         backgroundColor: const Color.fromRGBO(150, 0, 19, 1),
         title: const Text("Actualizar un archivo"),
         actions: [
+          IconButton(
+            onPressed: (){
+              showDialog(context: context, builder: (_)=> AlertDialog(
+                title: const Text("¿ESTÁS SEGURO QUE QUIERES BORRAR ESTE ARCHIVO?", style: TextStyle(color: Colors.red, fontSize: 18.0),),
+                content: const Text("Después de borrar el archivo no podras recuperarlo.", style: TextStyle(color: Colors.black, fontSize: 14.0),),
+                actions: [
+                  TextButton(
+                    onPressed: () async {
+                      await deleteImage(widget.imageUser.originalPath!);
+                      imageUserBloc.deleteImageUser(widget.imageUser);
+                      Navigator.pushReplacementNamed(context, 'home');
+                    },
+                    child: const Text("Confirmar", style: TextStyle(color: Colors.red),)
+                  ),
+                  TextButton(
+                    onPressed: (){
+                      Navigator.pop(context);
+                    },
+                    child: const Text("Cancelar", style: TextStyle(color: Colors.black),))
+                ],
+              ));
+            },
+            icon: const Icon(Icons.delete, color: Colors.red,)
+          ),
           IconButton(
             onPressed: () async {
               File file = await openFilePicker();
@@ -53,7 +87,7 @@ class _FileUpdateViewState extends State<FileUpdateView> {
           child: Column(
             children: [ 
               
-              ProductImage(url: url,),
+              ProductImage(url: url.isNotEmpty ? url : widget.imageUser.path,),
               textInput("Nombre del archivo", const Icon(Icons.file_copy_rounded, color: Color.fromRGBO(150, 0, 19, 1),)),
               switchButton(),
               _crearBoton()
@@ -70,7 +104,7 @@ class _FileUpdateViewState extends State<FileUpdateView> {
       margin: const EdgeInsets.only(left: 20.0, top: 20.0, right: 20.0),
       child: Center(
         child: TextFormField(
-          initialValue: widget.imageUser.nombre,
+          initialValue: nombreArchivo,
           cursorColor: Colors.black,
           decoration: InputDecoration(
             hintText: hintText,
@@ -84,7 +118,7 @@ class _FileUpdateViewState extends State<FileUpdateView> {
           ),
           onChanged: (value) {
             setState(() {
-              widget.imageUser.nombre = value;
+              nombreArchivo = value;
             });
           } ,
         ),
@@ -106,12 +140,12 @@ class _FileUpdateViewState extends State<FileUpdateView> {
           const SizedBox(width: 10.0,),
           Switch(
             // This bool value toggles the switch.
-            value: widget.imageUser.status,
+            value: isEnable,
             activeColor: Colors.red,
             onChanged: (bool value) {
               // This is called when the user toggles the switch.
               setState(() {
-                widget.imageUser.status = value;
+                isEnable = value;
               });
             },
           ),
@@ -154,9 +188,9 @@ class _FileUpdateViewState extends State<FileUpdateView> {
         ),
         onPressed: _isLoading ? null : () async {
           _isLoading = true;
-          if(widget.imageUser.path!.isEmpty || widget.imageUser.nombre.isEmpty){
+          if(widget.imageUser.nombre.isEmpty && nombreArchivo.isEmpty){
             showDialog(context: context, builder: (_) => AlertDialog(
-              title: const Text("Asegurate de seleccionar un archivo y llenar el campo nombre"),
+              title: const Text("El campo nombre del archivo no puede estar vacio"),
               actions: [
                 TextButton(
                   onPressed: (){
@@ -168,10 +202,18 @@ class _FileUpdateViewState extends State<FileUpdateView> {
               ],
             ));
           }else{
-            if(widget.imageUser.path! != url){
-              final urlFirebase = await uploadImage(File(url));
-              widget.imageUser.path = urlFirebase;
+            if(url.isNotEmpty){
+              final String nameFile = url.split("/").last;
+              if(widget.imageUser.originalPath! != nameFile){
+                debugPrint("original path delete: ${widget.imageUser.originalPath!}");
+                await deleteImage(widget.imageUser.originalPath!);
+                final urlFirebase = await uploadImage(File(url));
+                widget.imageUser.path = urlFirebase;
+                widget.imageUser.originalPath = nameFile;
+              }
             }
+            widget.imageUser.nombre = nombreArchivo;
+            widget.imageUser.status = isEnable;
             debugPrint("imageUser: ${widget.imageUser.nombre} , ${widget.imageUser.idArchive} , ${widget.imageUser.status} , ${widget.imageUser.path}");
             imageUserBloc.updateImageUser(widget.imageUser);
             Navigator.pushReplacementNamed(context, "home");

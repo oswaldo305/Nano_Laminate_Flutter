@@ -66,12 +66,12 @@ class ImageUserBloc extends Bloc<ImageUserEvent, ImageUserState> {
   Future updateImageUser(ImageUser imageUser) async {
 
     await imageUserProvider.updateImageUser(imageUser);
-    List<ImageUser> newImagesUser = updateListImageUser(state.images, imageUser);
+    List<ImageUser> newImagesUser = _updateListImageUser(state.images, imageUser);
     add(UpdateImageUserEvent(newImagesUser));
 
   }
 
-  List<ImageUser> updateListImageUser(List<ImageUser> listImages, ImageUser imageUser){
+  List<ImageUser> _updateListImageUser(List<ImageUser> listImages, ImageUser imageUser){
 
     for(int i = 0; listImages.length<i; i++){
       if(listImages[i].id == imageUser.id){
@@ -79,6 +79,21 @@ class ImageUserBloc extends Bloc<ImageUserEvent, ImageUserState> {
       }
     }
 
+    return listImages;
+
+  }
+
+  Future deleteImageUser(ImageUser imageUser) async {
+
+    await imageUserProvider.deleteImageUser(imageUser);
+    List<ImageUser> imagesUser = _deleteListImageUser(state.images, imageUser);
+    add(UpdateImageUserEvent(imagesUser));
+
+  }
+
+  List<ImageUser> _deleteListImageUser(List<ImageUser> listImages, ImageUser imageUser) {
+
+    listImages.removeWhere((image) => image.id == imageUser.id);
     return listImages;
 
   }

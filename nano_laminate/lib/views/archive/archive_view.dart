@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:nano_laminate/blocs/archive/archive_bloc.dart';
 import 'package:nano_laminate/blocs/image_user/image_user_bloc.dart';
 import 'package:nano_laminate/model/archive_model.dart';
 import 'package:nano_laminate/model/image_user_model.dart';
@@ -20,24 +21,42 @@ class ArchiveView extends StatefulWidget {
 class _ArchiveViewState extends State<ArchiveView> {
 
   late ImageUserBloc imageUserBloc;
+  late ArchiveBloc archiveBloc;
+  late bool isEnable;
+  bool edit = false;
+  late String nombreArchivo;
 
   @override
   void initState() {
     super.initState();
     imageUserBloc = BlocProvider.of<ImageUserBloc>(context);
     UserPreference.isAdmin ? imageUserBloc.getImagesUser(widget.archive.id!) : imageUserBloc.getActiveImagesUser(widget.archive.id!);
+    nombreArchivo = widget.archive.nombre;
+    isEnable = widget.archive.status;
   }
 
   @override
   Widget build(BuildContext context) {
 
+    archiveBloc = BlocProvider.of<ArchiveBloc>(context);
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: AppBar(
+        // toolbarHeight: size.height*0.15,
         backgroundColor: const Color.fromRGBO(150, 0, 19, 1),
-        title: Text(widget.archive.nombre),
+        title: edit ? textInput("Nombre archivo", const Icon(Icons.archive, color: Color.fromRGBO(150, 0, 19, 1),)) : Text(widget.archive.nombre),
         actions: [
+          edit ? Switch(
+            value: isEnable,
+            activeColor: Colors.red,
+            onChanged: (bool value) {
+              setState(() {
+                isEnable = value;
+              });
+              
+            },
+          ) : const Text(""),
           IconButton(
             disabledColor: Colors.transparent,
             icon: const Icon(Icons.add),
@@ -53,6 +72,25 @@ class _ArchiveViewState extends State<ArchiveView> {
         color: Colors.white,
         child: buildModulesGrid(size),
       ),
+      floatingActionButton: UserPreference.isAdmin ? CircleAvatar(
+        backgroundColor:  edit ? Colors.red : Colors.grey,
+        child: IconButton(
+          color: edit ? Colors.red : Colors.grey,
+          onPressed: (){
+            if(edit && nombreArchivo.isNotEmpty){
+              if(nombreArchivo != widget.archive.nombre || isEnable != widget.archive.status){
+                widget.archive.nombre = nombreArchivo;
+                widget.archive.status = isEnable;
+                archiveBloc.updateArchives(widget.archive);
+              }
+            }
+            setState(() {
+              edit ? edit = false : edit = true;
+            });
+          },
+          icon: const Icon(Icons.edit_document, color: Colors.white,)
+        ),
+      ): null,
     );
   }
 
@@ -115,6 +153,39 @@ class _ArchiveViewState extends State<ArchiveView> {
       },
     );
 
+  }
+
+  Container textInput(String hintText, Icon icon) {
+    return Container(
+      margin: const EdgeInsets.only(left: 20.0, top: 20.0),
+      height: 20.0,
+      child: TextFormField(
+        style: const TextStyle(color: Colors.white),
+        initialValue: nombreArchivo,
+        cursorColor: Colors.white,
+        decoration: InputDecoration(
+          hintText: hintText,
+          fillColor: Colors.white,
+          focusColor: Colors.white,
+          prefixIcon: icon,
+          hoverColor: Colors.white,
+          prefixIconColor: Colors.white,
+          suffixIconColor: Colors.white,
+          labelStyle: const TextStyle(color: Colors.white),
+          focusedBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(color: Color.fromRGBO(150, 0, 19, 1) ),
+          ),
+          enabledBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.white ),
+          )
+        ),
+        onChanged: (value) {
+          setState(() {
+            nombreArchivo = value;
+          });
+        } ,
+      ),
+    );
   }
     
 

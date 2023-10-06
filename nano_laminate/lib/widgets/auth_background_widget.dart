@@ -38,7 +38,11 @@ class _HeaderIcon extends StatelessWidget {
       child: Container(
         width: double.infinity,
         margin: const EdgeInsets.only( top: 30 ),
-        child: const Icon( Icons.person_pin, color: Colors.white, size: 100 ),
+        child: const Image(
+          height: 110.0,
+          image: AssetImage('assets/images/logo.png'),
+          fit: BoxFit.contain,
+        ),
       ),
     );
   }
@@ -71,8 +75,8 @@ class _PurpleBox extends StatelessWidget {
   BoxDecoration _purpleBackground() => BoxDecoration(
     gradient: LinearGradient(
       colors: [
-        Colors.blue[800]!,
-        Colors.blue[400]!
+        const Color.fromRGBO(150, 0, 19, 1),
+        Colors.red[200]!
       ]
     )
   );

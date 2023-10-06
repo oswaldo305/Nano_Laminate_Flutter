@@ -173,8 +173,9 @@ class _FileUploadViewState extends State<FileUploadView> {
             ));
           }else{
             final urlFirebase = await uploadImage(File(url));
-            ImageUser imageUser = ImageUser(nombre: nombreArchivo, idArchive: widget.archive.id!, status: isEnable, path: urlFirebase);
-            debugPrint("imageUser: ${imageUser.nombre} , ${imageUser.idArchive} , ${imageUser.status} , ${imageUser.path}");
+            debugPrint("originalPath: $url");
+            ImageUser imageUser = ImageUser(nombre: nombreArchivo, idArchive: widget.archive.id!, status: isEnable, path: urlFirebase, originalPath: url);
+            debugPrint("imageUser: ${imageUser.nombre} , ${imageUser.idArchive} , ${imageUser.status} , ${imageUser.path}, ${imageUser.originalPath}");
             imageUserBloc.addImageUser(imageUser);
             Navigator.pushReplacementNamed(context, "home");
           }
@@ -182,7 +183,7 @@ class _FileUploadViewState extends State<FileUploadView> {
         } ,
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal  : 80.0, vertical: 15.0),
-          child: const Text('Actualizar', style: TextStyle(color: Colors.white),),
+          child: const Text('Agregar', style: TextStyle(color: Colors.white),),
         ),
       ),
     );

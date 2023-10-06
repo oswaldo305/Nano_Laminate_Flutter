@@ -22,3 +22,13 @@ Future<String> uploadImage(File file) async{
   return url;
 
 }
+
+Future deleteImage(String path) async {
+
+  debugPrint("path to delete: $path");
+  final desertRef = storage.ref().child("images").child(path);
+
+  // Delete the file
+  await desertRef.delete();
+
+}

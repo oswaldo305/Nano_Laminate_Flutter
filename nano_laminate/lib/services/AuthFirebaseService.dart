@@ -5,6 +5,9 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 // ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class AuthFirebaseService extends ChangeNotifier{
 
@@ -12,6 +15,8 @@ class AuthFirebaseService extends ChangeNotifier{
   final String _firebaseToken = 'AIzaSyB5WTQsto0T341Q1jdRszp0J1vzoABidjY';
 
   final storage = const FlutterSecureStorage();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn googleSignIn = GoogleSignIn();
 
   Future<String?> createUser( String email, String password ) async {
 
@@ -68,6 +73,52 @@ class AuthFirebaseService extends ChangeNotifier{
 
     }
 
+  }
+
+  Future loginWithGoole() async {
+      try {
+      final GoogleSignInAccount? googleSignInAccount =
+          await googleSignIn.signIn();
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount!.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
+      final UserCredential authResult =
+          await _auth.signInWithCredential(credential);
+      final User? user = authResult.user;
+      debugPrint("user: ${user.toString()}");
+      await storage.write(key: 'token', value: googleSignInAuthentication.idToken);
+      return user;
+    } catch (error) {
+      print("Error al registrar con Google: $error");
+      return null;
+    }
+  }
+
+  Future loginWithApple() async {
+    try {
+      final result = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+      final AuthCredential credential = OAuthProvider("apple.com").credential(
+        idToken: result.identityToken,
+        accessToken: result.authorizationCode,
+      );
+      final UserCredential authResult =
+          await _auth.signInWithCredential(credential);
+      final User user = authResult.user!;
+      await storage.write(key: 'token', value: result.identityToken);
+      debugPrint("user: ${user.toString()}");
+      return user;
+    } catch (error) {
+      print("Error al registrar con Apple: $error");
+      return null;
+    }
   }
 
   Future logOut() async {

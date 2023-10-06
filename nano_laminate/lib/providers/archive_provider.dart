@@ -39,5 +39,11 @@ class ArchiveProvider {
 
   }
 
+  Future updateArchives(Archive archive) async {
+
+    await db.collection("archive").doc(archive.id).set(archive.toJson());
+
+  }
+
 
 }

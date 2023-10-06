@@ -37,7 +37,7 @@ class _AlertAddArchiveWidgetState extends State<AlertAddArchiveWidget> {
           onPressed: (){
             final archiveBloc = BlocProvider.of<ArchiveBloc>(context);
             if(_nombreArchive.isNotEmpty){  
-              final Archive archive = Archive(nombre: _nombreArchive);
+              final Archive archive = Archive(nombre: _nombreArchive, status: true);
               archiveBloc.addArchive(archive);
               Navigator.pop(context);
             }

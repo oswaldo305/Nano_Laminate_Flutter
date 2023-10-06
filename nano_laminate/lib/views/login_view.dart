@@ -31,18 +31,7 @@ class _LoginViewState extends State<LoginView> {
           child: Column(
             children: [
 
-
               _loginForm(),
-
-              const SizedBox( height: 50 ),
-              TextButton(
-                onPressed: () => Navigator.pushNamed(context, 'register'), 
-                style: ButtonStyle(
-                  overlayColor: MaterialStateProperty.all( Colors.indigo.withOpacity(0.1)),
-                  shape: MaterialStateProperty.all( const StadiumBorder() )
-                ),
-                child: const Text('Crear una nueva cuenta', style: TextStyle( fontSize: 18, color: Colors.black87 ),)
-              ),
 
             ]
           ),
@@ -95,7 +84,7 @@ class _LoginViewState extends State<LoginView> {
                   _crearBoton(),
                   _crearBotonGoogle(),
                   _crearBotonApple(),
-
+                  _crearBotonNewAccount()
             
                 ],
               ),
@@ -124,7 +113,7 @@ class _LoginViewState extends State<LoginView> {
             borderSide: BorderSide(color: Colors.black),
           ),
           focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.black),
+            borderSide: BorderSide(color: Color.fromRGBO(150, 0, 19, 1)),
           ),
         ),
         onTap: () {
@@ -160,6 +149,9 @@ class _LoginViewState extends State<LoginView> {
               enabledBorder: UnderlineInputBorder(
                 borderSide: BorderSide(color: Colors.black),
               ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Color.fromRGBO(150, 0, 19, 1)),
+              ),
             ),
             onChanged: (String value){
               _password = value;
@@ -194,7 +186,6 @@ class _LoginViewState extends State<LoginView> {
   
   
    return ElevatedButton.icon(
-
      style: ButtonStyle(
         shape: MaterialStateProperty.all<OutlinedBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0))),
         elevation: MaterialStateProperty.all<double>(0.0),
@@ -203,14 +194,14 @@ class _LoginViewState extends State<LoginView> {
       ),
 
       onPressed: _isLoading ? null : () async {
-        _login(_userName, _password);
-        // Navigator.pushReplacementNamed(context, 'home');
+        await authService.loginWithGoole();
+        Navigator.pushReplacementNamed(context, 'home');
       } ,
       icon: Image.asset('assets/images/google.png', height: 24),
       label: const Text(
-                  'Iniciar sesión con Google',
-                  style: TextStyle(color: Color.fromARGB(255, 27, 27, 27)),
-                ),
+        'Iniciar sesión con Google',
+        style: TextStyle(color: Color.fromARGB(255, 27, 27, 27)),
+      ),
         
     );
     //SizedBox(height: 22);
@@ -229,7 +220,10 @@ class _LoginViewState extends State<LoginView> {
         ((Set<MaterialState> states) => const Color.fromARGB(255, 0, 0, 0)),
       ),
 
-      onPressed: () => Navigator.pushReplacementNamed(context, 'home'),
+      onPressed: () async {
+        await authService.loginWithApple();
+        Navigator.pushReplacementNamed(context, 'home');
+      },
       icon: Image.asset('assets/images/apple.png', height: 24),
        label: const Text(
                 'Iniciar sesión con Apple',
@@ -239,6 +233,19 @@ class _LoginViewState extends State<LoginView> {
       
     );
     //SizedBox(height: 22);
+
+  }
+
+  _crearBotonNewAccount(){
+
+    return TextButton(
+      onPressed: () => Navigator.pushNamed(context, 'register'), 
+      style: ButtonStyle(
+        overlayColor: MaterialStateProperty.all( Colors.indigo.withOpacity(0.1)),
+        shape: MaterialStateProperty.all( const StadiumBorder() )
+      ),
+      child: const Text('Crear una nueva cuenta', style: TextStyle( fontSize: 18, color: Colors.black87 ),)
+    );
 
   }
 

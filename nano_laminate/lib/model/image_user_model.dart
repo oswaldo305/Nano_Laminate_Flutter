@@ -9,6 +9,7 @@ class ImageUser {
     String nombre;
     String idArchive;
     String? path;
+    String? originalPath;
     bool status;
 
     ImageUser({
@@ -16,6 +17,7 @@ class ImageUser {
         required this.nombre,
         required this.idArchive,
         this.path,
+        this.originalPath,
         required this.status
     });
 
@@ -24,6 +26,7 @@ class ImageUser {
         nombre: json["nombre"],
         idArchive: json["idArchive"],
         path: json["path"],
+        originalPath: json["originalPath"],
         status: json["status"]
     );
 
@@ -32,6 +35,7 @@ class ImageUser {
         "nombre": nombre,
         "idArchive" : idArchive,
         "path": path,
+        "originalPath": originalPath,
         "status" : status
     };
 }

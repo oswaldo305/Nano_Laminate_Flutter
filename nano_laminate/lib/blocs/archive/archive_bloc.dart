@@ -46,4 +46,24 @@ class ArchiveBloc extends Bloc<ArchiveEvent, ArchiveState> {
 
   }
 
+  Future updateArchives(Archive archive) async {
+
+    await archiveProvider.updateArchives(archive);
+    List<Archive> newArchive= _updateListArchive(state.archives, archive);
+    add(NewListArchiveEvent(newArchive));
+
+  }
+
+  List<Archive> _updateListArchive(List<Archive> listArchive, Archive archive){
+
+    for(int i = 0; listArchive.length<i; i++){
+      if(listArchive[i].id == archive.id){
+        listArchive[i] = archive;
+      }
+    }
+
+    return listArchive;
+
+  }
+
 }

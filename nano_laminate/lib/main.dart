@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
+      color: const Color.fromRGBO(150, 0, 19, 1),
       debugShowCheckedModeBanner: false,
       title: 'Nano Laminate',
       onGenerateRoute: route.controller,
