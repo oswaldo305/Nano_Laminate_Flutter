@@ -4,6 +4,9 @@ import 'package:nano_laminate/services/AuthFirebaseService.dart';
 import 'package:nano_laminate/services/notifications_service.dart';
 import 'package:nano_laminate/shared_preference/user_preference.dart';
 import 'package:nano_laminate/widgets/auth_background_widget.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 
 class LoginView extends StatefulWidget {
@@ -181,6 +184,29 @@ class _LoginViewState extends State<LoginView> {
     );
 
   }
+  Future<User?> signInWithGoogle() async {
+  try {
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    if (googleUser == null) {
+      // El usuario canceló el inicio de sesión
+      return null;
+    }
+
+    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+    final AuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    final UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+    return userCredential.user;
+  } catch (e) {
+    print(e.toString());
+    return null;
+  }
+}
+
 
   _crearBotonGoogle() {
   
@@ -194,8 +220,15 @@ class _LoginViewState extends State<LoginView> {
       ),
 
       onPressed: _isLoading ? null : () async {
-        await authService.loginWithGoole();
-        Navigator.pushReplacementNamed(context, 'home');
+        User? user = await signInWithGoogle();
+        if (user != null) {
+          Navigator.pushReplacementNamed(context, 'home');
+          print("Inicio de sesión exitoso: ${user.displayName}");
+          // Puedes redirigir al usuario o realizar otras acciones aquí
+        } else {
+          print("Inicio de sesión con Google fallido.");
+        }
+        
       } ,
       icon: Image.asset('assets/images/google.png', height: 24),
       label: const Text(
