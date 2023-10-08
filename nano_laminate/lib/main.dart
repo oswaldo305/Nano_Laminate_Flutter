@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Nano Laminate',
       onGenerateRoute: route.controller,
-      initialRoute: route.loginView,
+      initialRoute: route.basePage,
       scaffoldMessengerKey: NotificationsService.messengerKey,
     );
   }

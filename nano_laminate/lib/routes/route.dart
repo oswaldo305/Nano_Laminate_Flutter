@@ -5,8 +5,10 @@ import 'package:nano_laminate/views/archive/archive_view.dart';
 import 'package:nano_laminate/views/archive/file_update_view.dart';
 import 'package:nano_laminate/views/archive/file_upload_view.dart';
 import 'package:nano_laminate/views/archive/image_print_full_screen_view.dart';
+import 'package:nano_laminate/views/base_page_view.dart';
 import 'package:nano_laminate/views/bluetooth_list_view.dart';
 import 'package:nano_laminate/views/check_auth_view.dart';
+import 'package:nano_laminate/views/configuration_user_view.dart';
 import 'package:nano_laminate/views/home_view.dart';
 import 'package:nano_laminate/views/login_view.dart';
 import 'package:nano_laminate/views/register_view.dart';
@@ -14,6 +16,7 @@ import 'package:nano_laminate/views/archive/image_full_screen_view.dart';
 
 const String loginView = 'login';
 const String registerView = 'register';
+const String basePage= 'base_page';
 const String homeView='home';
 const String bluetoothListView='bluetoothList';
 const String checkAuthView= 'CheckAuthView';
@@ -22,6 +25,7 @@ const String fileUploadView = 'file_upload_view';
 const String imageFullScreen = 'image_full_screen_widget';
 const String imagePrintFullScreen = 'image_print_full_screen_widget';
 const String fileUpdateView = 'file_update_view';
+const String configurationUserView = 'configuration_user_view';
 
 // Control our page route flow
 Route<dynamic> controller(RouteSettings settings) {
@@ -30,6 +34,8 @@ Route<dynamic> controller(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => const LoginView());
     case registerView:
       return MaterialPageRoute(builder: (context) => const RegisterView());
+    case basePage:
+      return MaterialPageRoute(builder: (context) => const BasePageView());
     case homeView:
       return MaterialPageRoute(builder: (context) => const HomeView());
     case bluetoothListView:
@@ -51,6 +57,8 @@ Route<dynamic> controller(RouteSettings settings) {
     case fileUpdateView:
       ImageUser imageUser = settings.arguments as ImageUser;
       return MaterialPageRoute(builder: (context) => FileUpdateView(imageUser: imageUser));
+    case configurationUserView:
+      return MaterialPageRoute(builder: (context) => const ConfigurationUserView());
     default:
       throw ('This page doesnt exist');
   }

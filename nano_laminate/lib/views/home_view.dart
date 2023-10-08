@@ -21,22 +21,11 @@ class _HomeViewState extends State<HomeView> {
   final authService = AuthFirebaseService();
   late ArchiveBloc archiveBloc;
 
-  int _selectedIndex = 0;
-
   @override
   void initState() {
     super.initState();
     archiveBloc = BlocProvider.of<ArchiveBloc>(context);
     archiveBloc.getArchives();
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-     
-      
-      debugPrint(index.toString());
-    });
   }
 
 @override
@@ -68,26 +57,7 @@ class _HomeViewState extends State<HomeView> {
       body: Container(
         margin: const EdgeInsets.only(top: 30.0, left: 10.0, right: 10.0),
         child: buildModulesGrid(size),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.screenshot),
-            label: 'Plantillas',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bluetooth),
-            label: 'Conexiones',
-          ),
-           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Configuración',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: const Color.fromRGBO(150, 0, 19, 1),
-        onTap: _onItemTapped,
-      ),
+      )
     );
   }
 

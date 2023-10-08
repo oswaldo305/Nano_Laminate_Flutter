@@ -62,6 +62,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color.fromRGBO(150, 0, 19, 1),
         title: const Text('Bluetooth Scanner'),
       ),
       body: Center(
