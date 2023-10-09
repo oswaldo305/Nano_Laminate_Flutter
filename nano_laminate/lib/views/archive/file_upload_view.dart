@@ -7,6 +7,8 @@ import 'package:nano_laminate/blocs/image_user/image_user_bloc.dart';
 import 'package:nano_laminate/model/archive_model.dart';
 import 'package:nano_laminate/model/image_user_model.dart';
 import 'package:nano_laminate/services/FireBaseStorageService.dart';
+import 'package:nano_laminate/utils/navigations_methosd.dart';
+import 'package:nano_laminate/views/home_view.dart';
 import 'package:nano_laminate/widgets/archive/product_image.dart';
 
 class FileUploadView extends StatefulWidget {
@@ -165,7 +167,7 @@ class _FileUploadViewState extends State<FileUploadView> {
                 TextButton(
                   onPressed: (){
                     _isLoading = false;
-                    Navigator.pop(context);
+                    Navigator.pop(_);
                   },
                  child: const Text("Aceptar", style: TextStyle(color: Color.fromRGBO(150, 0, 19, 1)),) 
                 )
@@ -177,7 +179,8 @@ class _FileUploadViewState extends State<FileUploadView> {
             ImageUser imageUser = ImageUser(nombre: nombreArchivo, idArchive: widget.archive.id!, status: isEnable, path: urlFirebase, originalPath: url);
             debugPrint("imageUser: ${imageUser.nombre} , ${imageUser.idArchive} , ${imageUser.status} , ${imageUser.path}, ${imageUser.originalPath}");
             imageUserBloc.addImageUser(imageUser);
-            Navigator.pushReplacementNamed(context, "home");
+            // ignore: use_build_context_synchronously
+            pushAndReplaceTopage(context, const HomeView());
           }
           // Navigator.pushReplacementNamed(context, 'home');
         } ,

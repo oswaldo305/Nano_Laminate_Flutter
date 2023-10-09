@@ -1,6 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nano_laminate/blocs/user/user_bloc.dart';
+import 'package:nano_laminate/model/usuario_model.dart';
 import 'package:nano_laminate/services/AuthFirebaseService.dart';
 import 'package:nano_laminate/services/notifications_service.dart';
+import 'package:nano_laminate/widgets/auth_background_widget.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({Key? key}) : super(key: key);
@@ -23,61 +28,15 @@ class _RegisterViewState extends State<RegisterView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Stack(
-        children: [
-          _buildBackground(),
-          _loginForm()
-        ]
-      ),
-    );
-  }
-  
-  _buildBackground() {
-
-    final size = MediaQuery.of(context).size;
-
-    final fondoMorado = Container(
-      height: size.height  * 0.5,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: <Color>[
-            Colors.blue[800]!,
-            Colors.blue[400]!,
-          ]
-        )
-      ),
-    );
-
-    final circulo = Container(
-      width: 100.0,
-      height: 100.0,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(100),
-        color: Colors.blue[200]
-      ),
-    );
-
-    return Stack(
-      children: <Widget>[
-        fondoMorado,
-        Positioned( top: 90.0, left: 30.0, child: circulo ),
-        Positioned( top: -40.0, right: -30.0, child: circulo ),
-        Positioned( bottom: -50.0, right: -10.0, child: circulo ),
-        Positioned( bottom: 120.0, right: 20.0, child: circulo ),
-        Positioned( bottom: -50.0, left: -20.0, child: circulo ),
-
-        Container(
-          padding: const EdgeInsets.only(top: 90.0),
-          child: const Column(
-            children: <Widget>[
-              Icon( Icons.person_pin_circle, color: Colors.white, size: 100.0 ),
-              SizedBox( height: 10.0, width: double.infinity ),
+      body: AuthBackground(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              _loginForm()
             ],
           ),
         )
-
-      ],
+      )
     );
   }
   
@@ -124,6 +83,8 @@ class _RegisterViewState extends State<RegisterView> {
                   _crearPassword(),
                   const SizedBox(height: 30.0),
                   _crearBoton(),
+                  _crearBotonGoogle(),
+                  _crearBotonApple()
                 ],
               ),
             ),
@@ -193,6 +154,8 @@ class _RegisterViewState extends State<RegisterView> {
   }
   
   _crearBoton() {
+
+    final UserBloc userBloc = BlocProvider.of<UserBloc>(context);
   
     return ElevatedButton(
       style: ButtonStyle(
@@ -205,13 +168,15 @@ class _RegisterViewState extends State<RegisterView> {
         
         _isLoading = true;
 
-        final String? errorMessage = await authService.createUser(_userName!, _password!);
+        final Map<String, dynamic> response = await authService.createUser(_userName!, _password!);
 
-        if ( errorMessage == null ) {
-          // Navigator.pushReplacementNamed(context, 'home');
+        if ( response.containsKey('localId')) {
+          Usuario usuario = Usuario( id: response['localId'] , puntos: 0);
+          userBloc.postUsuario(usuario);
+          Navigator.pushReplacementNamed(context, 'CheckAuthView');
           debugPrint("Correcto");
         } else {
-          NotificationsService.showSnackbar(errorMessage);
+          NotificationsService.showSnackbar(response['error']['message']);
         }
 
       } ,
@@ -220,6 +185,78 @@ class _RegisterViewState extends State<RegisterView> {
         child: const Text('Registrarse'),
       ),
     );
+
+  }
+
+  _crearBotonGoogle() {
+    
+    final UserBloc userBloc = BlocProvider.of<UserBloc>(context);
+  
+    return ElevatedButton.icon(
+      style: ButtonStyle(
+          shape: MaterialStateProperty.all<OutlinedBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0))),
+          elevation: MaterialStateProperty.all<double>(0.0),
+          backgroundColor: MaterialStateProperty.resolveWith<Color>
+          ((Set<MaterialState> states) => const Color.fromARGB(255, 232, 236, 239)),
+        ),
+
+        onPressed: _isLoading ? null : () async {
+          _isLoading = true;
+          User? user = await authService.loginWithGoole();
+          if (user != null) {
+            await userBloc.getUsuarioByUid(user.uid);
+            Navigator.pushReplacementNamed(context, 'CheckAuthView');
+            debugPrint("Inicio de sesión exitoso: ${user.displayName} , ${user.uid}");
+            // Puedes redirigir al usuario o realizar otras acciones aquí
+          } else {
+            debugPrint("Inicio de sesión con Google fallido.");
+          }
+          
+        } ,
+        icon: Image.asset('assets/images/google.png', height: 24),
+        label: const Text(
+          'Iniciar sesión con Google',
+          style: TextStyle(color: Color.fromARGB(255, 27, 27, 27)),
+        ),
+          
+      );
+
+  }
+
+  _crearBotonApple() {
+  
+  
+   return ElevatedButton.icon(
+
+     style: ButtonStyle(
+        shape: MaterialStateProperty.all<OutlinedBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0))),
+        elevation: MaterialStateProperty.all<double>(0.0),
+        backgroundColor: MaterialStateProperty.resolveWith<Color>
+        ((Set<MaterialState> states) => const Color.fromARGB(255, 0, 0, 0)),
+      ),
+
+      onPressed: _isLoading ? null : () async {
+        _isLoading = true;
+        final UserBloc userBloc = BlocProvider.of<UserBloc>(context);
+        final User? user = await authService.loginWithApple();
+        if (user != null) {
+          await userBloc.getUsuarioByUid(user.uid);
+          Navigator.pushReplacementNamed(context, 'CheckAuthView');
+          debugPrint("Inicio de sesión exitoso: ${user.displayName} , ${user.uid}");
+          // Puedes redirigir al usuario o realizar otras acciones aquí
+        } else {
+          debugPrint("Inicio de sesión con Google fallido.");
+        }
+      },
+      icon: Image.asset('assets/images/apple.png', height: 24),
+        label: const Text(
+          'Iniciar sesión con Apple',
+          style: TextStyle(color: Colors.white),
+        ),
+      
+      
+    );
+    //SizedBox(height: 22);
 
   }
 

@@ -8,7 +8,8 @@ import 'package:nano_laminate/views/archive/image_print_full_screen_view.dart';
 import 'package:nano_laminate/views/base_page_view.dart';
 import 'package:nano_laminate/views/bluetooth_list_view.dart';
 import 'package:nano_laminate/views/check_auth_view.dart';
-import 'package:nano_laminate/views/configuration_user_view.dart';
+import 'package:nano_laminate/views/configuration/code_point_view.dart';
+import 'package:nano_laminate/views/configuration/configuration_user_view.dart';
 import 'package:nano_laminate/views/home_view.dart';
 import 'package:nano_laminate/views/login_view.dart';
 import 'package:nano_laminate/views/register_view.dart';
@@ -26,6 +27,7 @@ const String imageFullScreen = 'image_full_screen_widget';
 const String imagePrintFullScreen = 'image_print_full_screen_widget';
 const String fileUpdateView = 'file_update_view';
 const String configurationUserView = 'configuration_user_view';
+const String codePointView = 'code_point_view';
 
 // Control our page route flow
 Route<dynamic> controller(RouteSettings settings) {
@@ -39,7 +41,7 @@ Route<dynamic> controller(RouteSettings settings) {
     case homeView:
       return MaterialPageRoute(builder: (context) => const HomeView());
     case bluetoothListView:
-      return MaterialPageRoute(builder: (context) => const BluetoothListView());
+      return MaterialPageRoute(builder: (context) => const BluetoothScreen());
     case checkAuthView:
       return MaterialPageRoute(builder: (context) => const CheckAuthView());
     case archiveView:
@@ -59,6 +61,8 @@ Route<dynamic> controller(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => FileUpdateView(imageUser: imageUser));
     case configurationUserView:
       return MaterialPageRoute(builder: (context) => const ConfigurationUserView());
+    case codePointView:
+      return MaterialPageRoute(builder: (context) => const CodePointView());
     default:
       throw ('This page doesnt exist');
   }

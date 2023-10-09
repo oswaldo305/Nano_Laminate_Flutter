@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nano_laminate/blocs/user/user_bloc.dart';
 import 'package:nano_laminate/providers/user_provider.dart';
 import 'package:nano_laminate/services/AuthFirebaseService.dart';
 import 'package:nano_laminate/services/notifications_service.dart';
 import 'package:nano_laminate/shared_preference/user_preference.dart';
+import 'package:nano_laminate/utils/navigations_methosd.dart';
+import 'package:nano_laminate/views/register_view.dart';
 import 'package:nano_laminate/widgets/auth_background_widget.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 
 class LoginView extends StatefulWidget {
@@ -27,6 +29,7 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: AuthBackground(
@@ -158,7 +161,6 @@ class _LoginViewState extends State<LoginView> {
             ),
             onChanged: (String value){
               _password = value;
-              debugPrint("password: {$_password}");
             },
           ),
         );
@@ -184,60 +186,46 @@ class _LoginViewState extends State<LoginView> {
     );
 
   }
-  Future<User?> signInWithGoogle() async {
-  try {
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-    if (googleUser == null) {
-      // El usuario canceló el inicio de sesión
-      return null;
-    }
-
-    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-    final AuthCredential credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-
-    final UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
-    return userCredential.user;
-  } catch (e) {
-    print(e.toString());
-    return null;
-  }
-}
 
 
   _crearBotonGoogle() {
+    
+    final UserBloc userBloc = BlocProvider.of<UserBloc>(context);
   
-  
-   return ElevatedButton.icon(
-     style: ButtonStyle(
-        shape: MaterialStateProperty.all<OutlinedBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0))),
-        elevation: MaterialStateProperty.all<double>(0.0),
-        backgroundColor: MaterialStateProperty.resolveWith<Color>
-        ((Set<MaterialState> states) => const Color.fromARGB(255, 232, 236, 239)),
-      ),
+    return ElevatedButton.icon(
+      style: ButtonStyle(
+          shape: MaterialStateProperty.all<OutlinedBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0))),
+          elevation: MaterialStateProperty.all<double>(0.0),
+          backgroundColor: MaterialStateProperty.resolveWith<Color>
+          ((Set<MaterialState> states) => const Color.fromARGB(255, 232, 236, 239)),
+        ),
 
-      onPressed: _isLoading ? null : () async {
-        User? user = await signInWithGoogle();
-        if (user != null) {
-          Navigator.pushReplacementNamed(context, 'home');
-          print("Inicio de sesión exitoso: ${user.displayName}");
-          // Puedes redirigir al usuario o realizar otras acciones aquí
-        } else {
-          print("Inicio de sesión con Google fallido.");
-        }
-        
-      } ,
-      icon: Image.asset('assets/images/google.png', height: 24),
-      label: const Text(
-        'Iniciar sesión con Google',
-        style: TextStyle(color: Color.fromARGB(255, 27, 27, 27)),
-      ),
-        
-    );
-    //SizedBox(height: 22);
+        onPressed: _isLoading ? null : () async {
+          _isLoading = true;
+          User? user = await authService.loginWithGoole();
+          if (user != null) {
+            await userBloc.getUsuarioByUid(user.uid);
+            final String adminEmail = await userProvider.getAdmin();
+            if(user.email == adminEmail){
+              UserPreference.isAdmin = true;
+            }else{
+              UserPreference.isAdmin = false;
+            }
+            Navigator.pushReplacementNamed(context, 'CheckAuthView');
+            debugPrint("Inicio de sesión exitoso: ${user.displayName} , ${user.uid}");
+            // Puedes redirigir al usuario o realizar otras acciones aquí
+          } else {
+            debugPrint("Inicio de sesión con Google fallido.");
+          }
+          
+        } ,
+        icon: Image.asset('assets/images/google.png', height: 24),
+        label: const Text(
+          'Iniciar sesión con Google',
+          style: TextStyle(color: Color.fromARGB(255, 27, 27, 27)),
+        ),
+          
+      );
 
   }
 
@@ -253,15 +241,30 @@ class _LoginViewState extends State<LoginView> {
         ((Set<MaterialState> states) => const Color.fromARGB(255, 0, 0, 0)),
       ),
 
-      onPressed: () async {
-        await authService.loginWithApple();
-        Navigator.pushReplacementNamed(context, 'home');
+      onPressed: _isLoading ? null : () async {
+        _isLoading = true;
+        final UserBloc userBloc = BlocProvider.of<UserBloc>(context);
+        final User? user = await authService.loginWithApple();
+        if (user != null) {
+          await userBloc.getUsuarioByUid(user.uid);
+          final String adminEmail = await userProvider.getAdmin();
+          if(user.email == adminEmail){
+            UserPreference.isAdmin = true;
+          }else{
+            UserPreference.isAdmin = false;
+          }
+          Navigator.pushReplacementNamed(context, 'CheckAuthView');
+          debugPrint("Inicio de sesión exitoso: ${user.displayName} , ${user.uid}");
+          // Puedes redirigir al usuario o realizar otras acciones aquí
+        } else {
+          debugPrint("Inicio de sesión con Google fallido.");
+        }
       },
       icon: Image.asset('assets/images/apple.png', height: 24),
-       label: const Text(
-                'Iniciar sesión con Apple',
-                style: TextStyle(color: Colors.white),
-              ),
+        label: const Text(
+          'Iniciar sesión con Apple',
+          style: TextStyle(color: Colors.white),
+        ),
       
       
     );
@@ -272,7 +275,7 @@ class _LoginViewState extends State<LoginView> {
   _crearBotonNewAccount(){
 
     return TextButton(
-      onPressed: () => Navigator.pushNamed(context, 'register'), 
+      onPressed: () => pushTopage(context, const RegisterView()), 
       style: ButtonStyle(
         overlayColor: MaterialStateProperty.all( Colors.indigo.withOpacity(0.1)),
         shape: MaterialStateProperty.all( const StadiumBorder() )
@@ -295,7 +298,7 @@ class _LoginViewState extends State<LoginView> {
         UserPreference.isAdmin = false;
       }
       // ignore: use_build_context_synchronously
-      Navigator.pushReplacementNamed(context, 'home');
+      Navigator.pushReplacementNamed(context, 'base_page');
     } else {
       _isLoading = false;
       NotificationsService.showSnackbar(errorMessage);

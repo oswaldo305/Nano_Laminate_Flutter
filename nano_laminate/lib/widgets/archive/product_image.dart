@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:nano_laminate/utils/navigations_methosd.dart';
 import 'package:nano_laminate/views/archive/image_full_screen_view.dart';
 
 class ProductImage extends StatelessWidget {
@@ -83,7 +84,7 @@ class ProductImage extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, 'image_full_screen_widget', arguments: url);
+        pushTopage(context, ImageFullScreen(imageURL: url!));
       },
       child: Image.file(
         File( picture ),

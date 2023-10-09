@@ -34,13 +34,8 @@ class _BasePageViewState extends State<BasePageView> {
     }
   }
 
-  // buttom new
-
-  // String cantCart = '0';
   @override
   Widget build(BuildContext context) {
-
-    debugPrint(" navigator[2] ${_navigatorKeys["configuration_user_view"]} , navigator lenght ${_navigatorKeys.length}");
 
     return NotificationListener<MyNotification>(
       onNotification: (val) {
@@ -93,7 +88,7 @@ class _BasePageViewState extends State<BasePageView> {
         setState(() {
           keySeleccionada = pageKeys[index];
         });
-        print("keysss ${pageKeys[index]}");
+        debugPrint("keysss ${pageKeys[index]}");
         debugPrint("selected index: $_selectedIndex");
       },
       elevation: 20.0,

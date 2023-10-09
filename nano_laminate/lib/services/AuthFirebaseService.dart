@@ -18,7 +18,7 @@ class AuthFirebaseService extends ChangeNotifier{
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
 
-  Future<String?> createUser( String email, String password ) async {
+  Future<Map<String, dynamic>> createUser( String email, String password ) async {
 
     final Map<String, dynamic> authData = {
       'email': email,
@@ -37,11 +37,11 @@ class AuthFirebaseService extends ChangeNotifier{
 
       await storage.write(key: 'token', value: decodeResp['idToken']);
 
-      return null;
+      return decodeResp;
 
     }else{
 
-      return decodeResp['error']['message'];
+      return decodeResp;
 
     }
 
@@ -77,19 +77,17 @@ class AuthFirebaseService extends ChangeNotifier{
 
   Future loginWithGoole() async {
       try {
-      final GoogleSignInAccount? googleSignInAccount =
-          await googleSignIn.signIn();
-      final GoogleSignInAuthentication googleSignInAuthentication =
-          await googleSignInAccount!.authentication;
+      final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
+      final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount!.authentication;
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
       );
-      final UserCredential authResult =
-          await _auth.signInWithCredential(credential);
+      debugPrint("user1: ${googleSignInAccount.authHeaders}");
+      final UserCredential authResult = await _auth.signInWithCredential(credential);
       final User? user = authResult.user;
-      debugPrint("user: ${user.toString()}");
-      await storage.write(key: 'token', value: googleSignInAuthentication.idToken);
+      debugPrint("user: ${authResult.credential!.accessToken}");
+      await storage.write(key: 'token', value: authResult.credential!.accessToken);
       return user;
     } catch (error) {
       print("Error al registrar con Google: $error");
@@ -109,10 +107,11 @@ class AuthFirebaseService extends ChangeNotifier{
         idToken: result.identityToken,
         accessToken: result.authorizationCode,
       );
+      debugPrint("user1: ${result.identityToken.toString()}");
       final UserCredential authResult =
           await _auth.signInWithCredential(credential);
       final User user = authResult.user!;
-      await storage.write(key: 'token', value: result.identityToken);
+      await storage.write(key: 'token', value: authResult.credential!.accessToken);
       debugPrint("user: ${user.toString()}");
       return user;
     } catch (error) {
@@ -130,7 +129,9 @@ class AuthFirebaseService extends ChangeNotifier{
 
   Future<String> readToken() async {
 
-    return await  storage.read(key: 'token') ?? '';
+    String? token = await storage.read(key: 'token');
+    debugPrint("token: $token");
+    return await storage.read(key: 'token') ?? '';
 
   }
 

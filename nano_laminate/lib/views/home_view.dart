@@ -44,13 +44,6 @@ class _HomeViewState extends State<HomeView> {
             onPressed: () {
               showDialog(context: context, builder: (_) => const AlertAddArchiveWidget());
             },
-          ),
-          IconButton(
-            onPressed: (){
-              authService.logOut();
-              Navigator.pushReplacementNamed(context, 'login');
-            },
-            icon: const Icon(Icons.login_outlined)
           )
         ],
       ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nano_laminate/model/archive_model.dart';
+import 'package:nano_laminate/utils/navigations_methosd.dart';
+import 'package:nano_laminate/views/archive/archive_view.dart';
 
 class ArchiveButtonWidget extends StatelessWidget {
 
@@ -15,7 +17,7 @@ class ArchiveButtonWidget extends StatelessWidget {
         IconButton(
           iconSize: 80.0,
           onPressed: (){
-            Navigator.pushNamed(context, 'archive_view', arguments: archive);
+            pushTopage(context, ArchiveView(archive: archive));
           }, 
           icon: const Icon(Icons.archive, color: Color.fromRGBO(150, 0, 19, 1)),
         ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nano_laminate/views/bluetooth_list_view.dart';
-import 'package:nano_laminate/views/configuration_user_view.dart';
+import 'package:nano_laminate/views/configuration/configuration_user_view.dart';
 import 'package:nano_laminate/views/home_view.dart';
 class TabNavigator extends StatelessWidget {
 
@@ -18,7 +18,7 @@ class TabNavigator extends StatelessWidget {
     }
     else if(tabItem == "bluetoothList"){
 
-      child = const BluetoothListView();
+      child = const BluetoothScreen();
     }
     else if(tabItem == "configuration_user_view"){
       child = const ConfigurationUserView();

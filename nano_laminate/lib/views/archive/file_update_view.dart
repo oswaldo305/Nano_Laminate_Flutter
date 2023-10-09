@@ -6,6 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nano_laminate/blocs/image_user/image_user_bloc.dart';
 import 'package:nano_laminate/model/image_user_model.dart';
 import 'package:nano_laminate/services/FireBaseStorageService.dart';
+import 'package:nano_laminate/utils/navigations_methosd.dart';
+import 'package:nano_laminate/views/home_view.dart';
 import 'package:nano_laminate/widgets/archive/product_image.dart';
 
 class FileUpdateView extends StatefulWidget {
@@ -55,13 +57,14 @@ class _FileUpdateViewState extends State<FileUpdateView> {
                     onPressed: () async {
                       await deleteImage(widget.imageUser.originalPath!);
                       imageUserBloc.deleteImageUser(widget.imageUser);
-                      Navigator.pushReplacementNamed(context, 'home');
+                      // ignore: use_build_context_synchronously
+                      pushAndReplaceTopage(context, const HomeView());
                     },
                     child: const Text("Confirmar", style: TextStyle(color: Colors.red),)
                   ),
                   TextButton(
                     onPressed: (){
-                      Navigator.pop(context);
+                      Navigator.pop(_);
                     },
                     child: const Text("Cancelar", style: TextStyle(color: Colors.black),))
                 ],
@@ -195,7 +198,7 @@ class _FileUpdateViewState extends State<FileUpdateView> {
                 TextButton(
                   onPressed: (){
                     _isLoading = false;
-                    Navigator.pop(context);
+                    Navigator.pop(_);
                   },
                  child: const Text("Aceptar", style: TextStyle(color: Color.fromRGBO(150, 0, 19, 1)),) 
                 )
@@ -216,9 +219,9 @@ class _FileUpdateViewState extends State<FileUpdateView> {
             widget.imageUser.status = isEnable;
             debugPrint("imageUser: ${widget.imageUser.nombre} , ${widget.imageUser.idArchive} , ${widget.imageUser.status} , ${widget.imageUser.path}");
             imageUserBloc.updateImageUser(widget.imageUser);
-            Navigator.pushReplacementNamed(context, "home");
+            // ignore: use_build_context_synchronously
+            pushAndReplaceTopage(context, const HomeView());
           }
-          // Navigator.pushReplacementNamed(context, 'home');
         } ,
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal  : 80.0, vertical: 15.0),

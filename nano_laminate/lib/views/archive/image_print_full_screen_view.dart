@@ -16,6 +16,7 @@ class ImagePrintFullScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color.fromRGBO(150, 0, 19, 1),
         title: Text("${imageUser.nombre[0].toUpperCase()} ${imageUser.nombre.substring(0)}"),
         actions: [
           IconButton(

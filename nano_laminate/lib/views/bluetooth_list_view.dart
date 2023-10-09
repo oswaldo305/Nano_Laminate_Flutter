@@ -1,25 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 
-
-
-class BluetoothListView extends StatelessWidget {
-
-    const BluetoothListView({Key? key}) : super(key: key);
-
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Bluetooth Scanner',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const BluetoothScreen(),
-    );
-  }
-}
-
 class BluetoothScreen extends StatefulWidget {
   
   const BluetoothScreen({Key? key}) : super(key: key);

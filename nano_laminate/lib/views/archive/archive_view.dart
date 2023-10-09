@@ -6,6 +6,8 @@ import 'package:nano_laminate/blocs/image_user/image_user_bloc.dart';
 import 'package:nano_laminate/model/archive_model.dart';
 import 'package:nano_laminate/model/image_user_model.dart';
 import 'package:nano_laminate/shared_preference/user_preference.dart';
+import 'package:nano_laminate/utils/navigations_methosd.dart';
+import 'package:nano_laminate/views/archive/file_upload_view.dart';
 import 'package:nano_laminate/widgets/archive/image_user_button_widget.dart';
 
 class ArchiveView extends StatefulWidget {
@@ -60,8 +62,8 @@ class _ArchiveViewState extends State<ArchiveView> {
           IconButton(
             disabledColor: Colors.transparent,
             icon: const Icon(Icons.add),
-            onPressed: UserPreference.isAdmin ? () async {
-              Navigator.pushNamed(context, 'file_upload_view', arguments: widget.archive);
+            onPressed: UserPreference.isAdmin ? () {
+              pushTopage(context, FileUploadView(archive: widget.archive));
             } : null,
           )
         ],

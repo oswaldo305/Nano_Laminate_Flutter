@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nano_laminate/services/AuthFirebaseService.dart';
-import 'package:nano_laminate/views/home_view.dart';
+import 'package:nano_laminate/views/base_page_view.dart';
 import 'package:nano_laminate/views/login_view.dart';
 
 class CheckAuthView extends StatelessWidget {
@@ -21,6 +21,8 @@ class CheckAuthView extends StatelessWidget {
               return const Text('espere');
             }
 
+            debugPrint("Snapshot data token: ${snapshot.data}");
+
             if( snapshot.data == '' ){
               Future.microtask(() {
                 Navigator.pushReplacement(context, PageRouteBuilder(
@@ -32,7 +34,7 @@ class CheckAuthView extends StatelessWidget {
             }else{
               Future.microtask(() {
                 Navigator.pushReplacement(context, PageRouteBuilder(
-                    pageBuilder: (_,  __, ___) => const HomeView(),
+                    pageBuilder: (_,  __, ___) => const BasePageView(),
                     transitionDuration: const Duration(seconds: 0)
                   )
                 );

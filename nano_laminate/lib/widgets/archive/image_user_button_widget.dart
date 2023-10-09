@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nano_laminate/model/image_user_model.dart';
 import 'package:nano_laminate/shared_preference/user_preference.dart';
+import 'package:nano_laminate/utils/navigations_methosd.dart';
+import 'package:nano_laminate/views/archive/file_update_view.dart';
+import 'package:nano_laminate/views/archive/image_print_full_screen_view.dart';
 
 class ImageUserButtonWidget extends StatelessWidget {
 
@@ -26,8 +29,8 @@ class ImageUserButtonWidget extends StatelessWidget {
         GestureDetector(
           onTap: (){
             UserPreference.isAdmin ? 
-            Navigator.pushNamed(context, 'file_update_view', arguments: imageUser) : 
-            Navigator.pushNamed(context, 'image_print_full_screen_widget', arguments: imageUser);
+            pushTopage(context, FileUpdateView(imageUser: imageUser)): 
+            pushTopage(context, ImagePrintFullScreen(imageUser: imageUser));
           },
           child: FadeInImage(
             height: 170.0,
