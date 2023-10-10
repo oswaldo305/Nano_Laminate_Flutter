@@ -55,7 +55,7 @@ class _CodePointViewState extends State<CodePointView> {
                   width: double.infinity,
                   margin: const EdgeInsets.only(bottom: 17.0, right: 20.0),
                   alignment: Alignment.bottomRight,
-                  child: Text("Total puntos: ${userBloc.state.user!.puntos}", style: TextStyle(color: Colors.black),),
+                  child: Text("Total puntos: ${userBloc.state.user!.puntos}", style: const TextStyle(color: Colors.black),),
                 )
           )
         ],

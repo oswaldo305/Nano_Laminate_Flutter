@@ -31,7 +31,6 @@ class _FileUpdateViewState extends State<FileUpdateView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     isEnable =  widget.imageUser.status;
     nombreArchivo = widget.imageUser.nombre;

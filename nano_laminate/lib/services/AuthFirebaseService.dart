@@ -90,7 +90,7 @@ class AuthFirebaseService extends ChangeNotifier{
       await storage.write(key: 'token', value: authResult.credential!.accessToken);
       return user;
     } catch (error) {
-      print("Error al registrar con Google: $error");
+      debugPrint("Error al registrar con Google: $error");
       return null;
     }
   }
@@ -115,7 +115,7 @@ class AuthFirebaseService extends ChangeNotifier{
       debugPrint("user: ${user.toString()}");
       return user;
     } catch (error) {
-      print("Error al registrar con Apple: $error");
+      debugPrint("Error al registrar con Apple: $error");
       return null;
     }
   }

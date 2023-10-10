@@ -211,6 +211,7 @@ class _LoginViewState extends State<LoginView> {
             }else{
               UserPreference.isAdmin = false;
             }
+            // ignore: use_build_context_synchronously
             Navigator.pushReplacementNamed(context, 'CheckAuthView');
             debugPrint("Inicio de sesión exitoso: ${user.displayName} , ${user.uid}");
             // Puedes redirigir al usuario o realizar otras acciones aquí
@@ -253,6 +254,7 @@ class _LoginViewState extends State<LoginView> {
           }else{
             UserPreference.isAdmin = false;
           }
+          // ignore: use_build_context_synchronously
           Navigator.pushReplacementNamed(context, 'CheckAuthView');
           debugPrint("Inicio de sesión exitoso: ${user.displayName} , ${user.uid}");
           // Puedes redirigir al usuario o realizar otras acciones aquí

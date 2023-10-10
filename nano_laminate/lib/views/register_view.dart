@@ -173,6 +173,7 @@ class _RegisterViewState extends State<RegisterView> {
         if ( response.containsKey('localId')) {
           Usuario usuario = Usuario( id: response['localId'] , puntos: 0);
           userBloc.postUsuario(usuario);
+          // ignore: use_build_context_synchronously
           Navigator.pushReplacementNamed(context, 'CheckAuthView');
           debugPrint("Correcto");
         } else {
@@ -205,6 +206,7 @@ class _RegisterViewState extends State<RegisterView> {
           User? user = await authService.loginWithGoole();
           if (user != null) {
             await userBloc.getUsuarioByUid(user.uid);
+            // ignore: use_build_context_synchronously
             Navigator.pushReplacementNamed(context, 'CheckAuthView');
             debugPrint("Inicio de sesión exitoso: ${user.displayName} , ${user.uid}");
             // Puedes redirigir al usuario o realizar otras acciones aquí
@@ -241,6 +243,7 @@ class _RegisterViewState extends State<RegisterView> {
         final User? user = await authService.loginWithApple();
         if (user != null) {
           await userBloc.getUsuarioByUid(user.uid);
+          // ignore: use_build_context_synchronously
           Navigator.pushReplacementNamed(context, 'CheckAuthView');
           debugPrint("Inicio de sesión exitoso: ${user.displayName} , ${user.uid}");
           // Puedes redirigir al usuario o realizar otras acciones aquí

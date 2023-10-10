@@ -26,7 +26,7 @@ class _BasePageViewState extends State<BasePageView> {
     if (tabItem == _currentPage) {
       _navigatorKeys[tabItem]!.currentState!.popUntil((route) => route.isFirst);
     } else {
-      print(index);
+      debugPrint(index.toString());
       setState(() {
         _currentPage = pageKeys[index];
         _selectedIndex = index;
