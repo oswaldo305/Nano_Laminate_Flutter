@@ -12,12 +12,20 @@ class BluetoothScreen extends StatefulWidget {
 class _BluetoothScreenState extends State<BluetoothScreen> {
   FlutterBlue flutterBlue = FlutterBlue.instance;
   List<BluetoothDevice> devicesList = [];
+  
+  @override
+  void setState(fn) {
+    if(mounted) {
+      super.setState(fn);
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     _startScan();
   }
+
 
   Future<void> _startScan() async {
     flutterBlue.scanResults.listen((results) {
@@ -51,11 +59,13 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
           itemCount: devicesList.length,
           itemBuilder: (context, index) {
             final device = devicesList[index];
+            debugPrint("device: ${device.name}");
             return ListTile(
               title: Text(device.name),
               subtitle: Text(device.id.toString()),
               onTap: () {
                 // Aquí implementar una acción al seleccionar un dispositivo.
+                device.connect();
               },
             );
           },
