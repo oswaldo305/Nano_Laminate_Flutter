@@ -205,12 +205,7 @@ class _LoginViewState extends State<LoginView> {
           User? user = await authService.loginWithGoole();
           if (user != null) {
             await userBloc.getUsuarioByUid(user.uid);
-            final String adminEmail = await userProvider.getAdmin();
-            if(user.email == adminEmail){
-              UserPreference.isAdmin = true;
-            }else{
-              UserPreference.isAdmin = false;
-            }
+            UserPreference.isAdmin = await userProvider.isAdmin(user.uid);
             // ignore: use_build_context_synchronously
             Navigator.pushReplacementNamed(context, 'CheckAuthView');
             debugPrint("Inicio de sesión exitoso: ${user.displayName} , ${user.uid}");
@@ -248,12 +243,7 @@ class _LoginViewState extends State<LoginView> {
         final User? user = await authService.loginWithApple();
         if (user != null) {
           await userBloc.getUsuarioByUid(user.uid);
-          final String adminEmail = await userProvider.getAdmin();
-          if(user.email == adminEmail){
-            UserPreference.isAdmin = true;
-          }else{
-            UserPreference.isAdmin = false;
-          }
+          UserPreference.isAdmin = await userProvider.isAdmin(user.uid);
           // ignore: use_build_context_synchronously
           Navigator.pushReplacementNamed(context, 'CheckAuthView');
           debugPrint("Inicio de sesión exitoso: ${user.displayName} , ${user.uid}");
@@ -290,20 +280,17 @@ class _LoginViewState extends State<LoginView> {
   void _login(String? userName, String? password) async {
     _isLoading = true;
 
-    final String? errorMessage = await authService.login(_userName!, _password!);
-    final String adminEmail = await userProvider.getAdmin();
+    final UserBloc userBloc = BlocProvider.of<UserBloc>(context);
+    final Map<String, String> response = await authService.login(_userName!, _password!);
 
-    if ( errorMessage == null ) {
-      if(userName == adminEmail){
-        UserPreference.isAdmin = true;
-      }else{
-        UserPreference.isAdmin = false;
-      }
+    if ( response.containsKey('uid')) {
+      UserPreference.isAdmin = await userProvider.isAdmin(response['uid']!);
+      await userBloc.getUsuarioByUid(response['uid']!);
       // ignore: use_build_context_synchronously
       Navigator.pushReplacementNamed(context, 'base_page');
     } else {
       _isLoading = false;
-      NotificationsService.showSnackbar(errorMessage);
+      NotificationsService.showSnackbar(response['error']!);
     }
 
   }

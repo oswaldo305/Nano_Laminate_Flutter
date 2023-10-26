@@ -9,31 +9,31 @@ class UserProvider {
 
   final FirebaseFirestore db = FirebaseFirestore.instance;
 
-  Future<String> getAdmin() async {
+  Future<bool> isAdmin(String uid) async {
 
-    String adminEmail = "";
-    CollectionReference collectionReferenceArchives = db.collection("admin");
-    QuerySnapshot queryArchives = await collectionReferenceArchives.get();
-
-    for (var documento in queryArchives.docs) {
-      String adminJson = jsonEncode(documento.data());
-      Map<String, dynamic> adminMap = jsonDecode(adminJson);
-      adminEmail = adminMap['email'];
+    bool isAdmin = false;
+    DocumentSnapshot documento = await db.collection("admin").doc(uid).get();
+    if(documento.exists){
+      isAdmin = true;
     }
 
 
-    return adminEmail;
+    return isAdmin;
 
   }
 
-  Future<Usuario> getUserbyUid(String uid) async {
+  Future<Usuario?> getUserbyUid(String uid) async {
 
     DocumentSnapshot documento = await db.collection("usuario").doc(uid).get();
-    String usuarioJson = jsonEncode(documento.data());
-    Usuario usuario = usuarioFromJson(usuarioJson);
-    usuario.id = uid;
+    if(documento.exists){
+      String usuarioJson = jsonEncode(documento.data());
+      Usuario usuario = usuarioFromJson(usuarioJson);
+      usuario.id = uid;
 
-    return usuario;
+      return usuario;
+    }else{
+      return null;
+    }
 
   }
 

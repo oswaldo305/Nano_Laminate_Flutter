@@ -47,7 +47,9 @@ class AuthFirebaseService extends ChangeNotifier{
 
   }
 
-  Future<String?> login( String email , String password ) async {
+  Future<Map<String, String>> login( String email , String password ) async {
+
+    Map<String, String> response;
 
     final Map<String, dynamic> authData = {
       'email' : email,
@@ -65,11 +67,19 @@ class AuthFirebaseService extends ChangeNotifier{
 
       await storage.write(key: 'token', value: decodeResp['idToken']);
 
-      return null;
+      response = {
+        'uid' : decodeResp['localId']
+      };
+
+      return response;
 
     }else{
 
-      return decodeResp['error']['message'];
+      response = {
+        'error' : decodeResp['error']['message']
+      };
+
+      return response;
 
     }
 
@@ -86,7 +96,7 @@ class AuthFirebaseService extends ChangeNotifier{
       debugPrint("user1: ${googleSignInAccount.authHeaders}");
       final UserCredential authResult = await _auth.signInWithCredential(credential);
       final User? user = authResult.user;
-      debugPrint("user: ${authResult.credential!.accessToken}");
+      debugPrint("user: ${user!.uid.toString()}");
       await storage.write(key: 'token', value: authResult.credential!.accessToken);
       return user;
     } catch (error) {
@@ -132,6 +142,18 @@ class AuthFirebaseService extends ChangeNotifier{
     String? token = await storage.read(key: 'token');
     debugPrint("token: $token");
     return await storage.read(key: 'token') ?? '';
+
+  }
+
+  Future<bool> tokenExist() async {
+
+    bool isExist = true;
+    String? token = await storage.read(key: 'token');
+    if(token == null){
+      isExist = false;
+    }
+
+    return isExist;
 
   }
 

@@ -32,7 +32,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
   Future getUsuarioByUid(String uid) async {
     final usuario = await _userProvider.getUserbyUid(uid);
-    add( NewUserEvent(usuario) );
+    add( NewUserEvent(usuario!) );
   }
 
   Future postUsuario(Usuario usuario) async {

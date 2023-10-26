@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nano_laminate/services/AuthFirebaseService.dart';
 import 'package:nano_laminate/widgets/tab_navigator_widget.dart';
 
 class MyNotification extends Notification {}
@@ -11,6 +12,8 @@ class BasePageView extends StatefulWidget {
 }
 
 class _BasePageViewState extends State<BasePageView> {
+
+  final authService = AuthFirebaseService();
 
   String keySeleccionada = 'home';
   String _currentPage = "home";
@@ -33,6 +36,7 @@ class _BasePageViewState extends State<BasePageView> {
       });
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

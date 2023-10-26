@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:nano_laminate/services/AuthFirebaseService.dart';
 import 'package:nano_laminate/shared_preference/user_preference.dart';
+import 'package:nano_laminate/utils/alert_sesion.dart';
 import 'package:nano_laminate/utils/navigations_methosd.dart';
+import 'package:nano_laminate/views/base_page_view.dart';
 import 'package:nano_laminate/views/configuration/code_point_view.dart';
-import 'package:nano_laminate/views/login_view.dart';
 
 class ConfigurationUserView extends StatefulWidget {
   const ConfigurationUserView({super.key});
@@ -61,7 +62,8 @@ class _ConfigurationUserViewState extends State<ConfigurationUserView> {
                     trailing: const Icon(Icons.logout, color:Color.fromRGBO(150, 0, 19, 1),),
                     onTap: () {
                       authService.logOut();
-                      pushAndReplaceTopage(context, const LoginView());
+                      MyNotification().dispatch(context);
+                      showAlertLogoutStatus(context);
                     },
                   ),
                 )

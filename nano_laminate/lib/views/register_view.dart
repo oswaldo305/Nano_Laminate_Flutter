@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nano_laminate/blocs/user/user_bloc.dart';
 import 'package:nano_laminate/model/usuario_model.dart';
+import 'package:nano_laminate/providers/user_provider.dart';
 import 'package:nano_laminate/services/AuthFirebaseService.dart';
 import 'package:nano_laminate/services/notifications_service.dart';
+import 'package:nano_laminate/shared_preference/user_preference.dart';
 import 'package:nano_laminate/widgets/auth_background_widget.dart';
 
 class RegisterView extends StatefulWidget {
@@ -177,6 +179,9 @@ class _RegisterViewState extends State<RegisterView> {
           Navigator.pushReplacementNamed(context, 'CheckAuthView');
           debugPrint("Correcto");
         } else {
+          setState(() {
+            _isLoading = false;
+          });
           NotificationsService.showSnackbar(response['error']['message']);
         }
 
@@ -192,6 +197,7 @@ class _RegisterViewState extends State<RegisterView> {
   _crearBotonGoogle() {
     
     final UserBloc userBloc = BlocProvider.of<UserBloc>(context);
+    final UserProvider userProvider = UserProvider();
   
     return ElevatedButton.icon(
       style: ButtonStyle(
@@ -205,7 +211,14 @@ class _RegisterViewState extends State<RegisterView> {
           _isLoading = true;
           User? user = await authService.loginWithGoole();
           if (user != null) {
-            await userBloc.getUsuarioByUid(user.uid);
+            final Usuario? userExist = await userProvider.getUserbyUid(user.uid);
+            if(userExist == null){
+              Usuario usuario = Usuario( id: user.uid , puntos: 0);
+              userBloc.postUsuario(usuario);
+            }else{
+              await userBloc.getUsuarioByUid(user.uid);
+              UserPreference.isAdmin = await userProvider.isAdmin(user.uid);
+            }
             // ignore: use_build_context_synchronously
             Navigator.pushReplacementNamed(context, 'CheckAuthView');
             debugPrint("Inicio de sesión exitoso: ${user.displayName} , ${user.uid}");
@@ -226,7 +239,9 @@ class _RegisterViewState extends State<RegisterView> {
   }
 
   _crearBotonApple() {
-  
+    
+    final UserBloc userBloc = BlocProvider.of<UserBloc>(context);
+    final UserProvider userProvider = UserProvider();
   
    return ElevatedButton.icon(
 
@@ -239,10 +254,17 @@ class _RegisterViewState extends State<RegisterView> {
 
       onPressed: _isLoading ? null : () async {
         _isLoading = true;
-        final UserBloc userBloc = BlocProvider.of<UserBloc>(context);
+
         final User? user = await authService.loginWithApple();
         if (user != null) {
-          await userBloc.getUsuarioByUid(user.uid);
+          final Usuario? userExist = await userProvider.getUserbyUid(user.uid);
+          if(userExist == null){
+            Usuario usuario = Usuario( id: user.uid , puntos: 0);
+            userBloc.postUsuario(usuario);
+          }else{
+            await userBloc.getUsuarioByUid(user.uid);
+            UserPreference.isAdmin = await userProvider.isAdmin(user.uid);
+          }
           // ignore: use_build_context_synchronously
           Navigator.pushReplacementNamed(context, 'CheckAuthView');
           debugPrint("Inicio de sesión exitoso: ${user.displayName} , ${user.uid}");

@@ -36,8 +36,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.light,
       color: const Color.fromRGBO(150, 0, 19, 1),
       debugShowCheckedModeBanner: false,
       title: 'Nano Laminate',

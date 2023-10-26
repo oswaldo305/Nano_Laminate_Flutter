@@ -39,12 +39,12 @@ class _HomeViewState extends State<HomeView> {
         backgroundColor: const Color.fromRGBO(150, 0, 19, 1),
         title: const Text('Plantillas'),
          actions: [
-          IconButton(
+            UserPreference.isAdmin ? IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
               showDialog(context: context, builder: (_) => const AlertAddArchiveWidget());
             },
-          )
+          ) : Container()
         ],
       ),
       body: Container(
